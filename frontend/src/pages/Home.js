@@ -1,11 +1,23 @@
 import Header from "../components/Header"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { LuSearch } from "react-icons/lu";
 import NewsItem from "../components/NewsItem";
 import "../styles/style.css"
+import newsService from "../services/newsService";
 
 const Home = () => {
     const [search, setSearch] = useState("")
+    const [listNews, setListNews] = useState([])
+    useEffect(() => {
+        newsService.getNews()
+            .then((response) => {
+                console.log("zoooooo");
+                console.log(response.data);
+                setListNews(response.data)
+            })
+            .catch((error) => console.log(error))
+
+    }, [])
     return (
         <>
             {/* Header */}
@@ -21,12 +33,17 @@ const Home = () => {
                 {/* Tin tức */}
                 <h1>BẢNG TIN HÔM NAY</h1>
                 <div className="list-news">
-                    <NewsItem />
-                    <NewsItem />
-                    <NewsItem />
-                    <NewsItem />
-                    <NewsItem />
-                    <NewsItem />
+                    {listNews.length > 0
+                        ? listNews.map((item) => 
+                            <NewsItem 
+                                title={item.title} 
+                                image_url={item.image_url}
+                                url={item.url}
+                                id={item.id}
+                                summary={item.summary}
+                            />)
+                        : ""
+                    }
                 </div>
             </div>
         </>

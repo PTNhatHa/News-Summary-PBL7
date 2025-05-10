@@ -4,20 +4,18 @@ import { LuClock } from "react-icons/lu";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { useState } from 'react';
 
-const NewsItem = ({ }) => {
+const NewsItem = ({ title, content, image_url, url, id, summary }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
 
     return (
         <>
-            <article className="wrap-news-item" onClick={() => setOpenOverlay(true)}>
-                <img src={DefaultImg} className='thumbnail' />
+            <article key={id} className="wrap-news-item" onClick={() => setOpenOverlay(true)}>
+                <img src={image_url} className='thumbnail' />
                 <div className='wrap-content'>
-                    <h2>Phim 'Nàng Bạch Tuyết' nhận mưa lời khen</h2>
-                    <p className='description'>
-                        "Snow White" được giới chuyên môn khen là bữa tiệc thị giác với hình ảnh và diễn xuất của người đẹp da màu Rachel Zegler trong vai Bạch Tuyết.
-                    </p>
+                    <h2>{title}</h2>
+                    <p className='description'>{summary}</p>
                     <span className="date">
                         <LuClock size={16} />
                         12 giờ trước
@@ -30,9 +28,7 @@ const NewsItem = ({ }) => {
                         <h2>Bạn có hài lòng với đoạn tóm tắt này không?</h2>
                         <p>Nguồn bài viết: <span className='content-url'>Phim 'Nàng Bạch Tuyết' nhận mưa lời khen</span></p>
                         <div className='wrap-feedback'>
-                            <p>
-                                "Snow White" được giới chuyên môn khen là bữa tiệc thị giác với hình ảnh và diễn xuất của người đẹp da màu Rachel Zegler trong vai Bạch Tuyết.
-                            </p>
+                            <p>{summary}</p>
                             <div className='divide' />
                             <div className='feedback-choice'>
                                 <p>Đánh giá của bạn giúp chúng tôi cải thiện chất lượng tóm tắt. Xin cảm ơn!</p>
