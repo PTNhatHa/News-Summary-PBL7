@@ -11,6 +11,7 @@ class Article(Base):
     content = Column(Text)
     image_url = Column(String(512))
     url = Column(String(512), unique=True)
+    posted_date = Column(DateTime)
     created_at = Column(DateTime, default=datetime.now)
     summary = relationship("Summary", back_populates="article", uselist=False)
 
