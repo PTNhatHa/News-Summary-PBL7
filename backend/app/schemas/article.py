@@ -2,12 +2,14 @@
 
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime 
 
 class ArticleBase(BaseModel):
     title: str
     content: str
     image_url: Optional[str]
     url: str
+    posted_date: datetime
 
 class ArticleCreate(ArticleBase):
     pass

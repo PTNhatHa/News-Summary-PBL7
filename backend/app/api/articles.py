@@ -6,6 +6,7 @@ from app.database import get_db
 from app.models.models import Article, Summary
 from app.schemas.article import ArticleOut
 from typing import List
+from datetime import datetime
 
 router = APIRouter()
 
@@ -22,6 +23,7 @@ def get_articles(db: Session = Depends(get_db)):
             content=article.content,
             image_url=article.image_url,
             url=article.url,
+            posted_date=article.posted_date or article.created_at,
             summary=summary.text if summary else None
         ))
 
