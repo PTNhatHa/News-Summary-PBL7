@@ -1,8 +1,8 @@
-"""create articles, summaries, feedbacks
+"""init postgresql
 
-Revision ID: 0d9dfb7d5492
-Revises: 1968648a16ea
-Create Date: 2025-05-05 16:46:03.903225
+Revision ID: 9e212fb80e0f
+Revises: 
+Create Date: 2025-05-17 22:07:25.118329
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0d9dfb7d5492'
-down_revision: Union[str, None] = '1968648a16ea'
+revision: str = '9e212fb80e0f'
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -27,6 +27,7 @@ def upgrade() -> None:
     sa.Column('content', sa.Text(), nullable=True),
     sa.Column('image_url', sa.String(length=512), nullable=True),
     sa.Column('url', sa.String(length=512), nullable=True),
+    sa.Column('posted_date', sa.DateTime(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('url')
