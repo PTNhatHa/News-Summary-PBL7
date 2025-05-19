@@ -4,7 +4,7 @@ import { LuClock } from "react-icons/lu";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { useState } from 'react';
 
-const NewsItem = ({ title, content, image_url, url, id, summary }) => {
+const NewsItem = ({ title, content, image_url, url, posted_date, id, summary }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
@@ -18,7 +18,7 @@ const NewsItem = ({ title, content, image_url, url, id, summary }) => {
                     <p className='description'>{summary}</p>
                     <span className="date">
                         <LuClock size={16} />
-                        12 giờ trước
+                        {posted_date}
                     </span>
                 </div>
             </article>

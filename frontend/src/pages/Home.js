@@ -34,11 +34,12 @@ const Home = () => {
                 <h1>BẢNG TIN HÔM NAY</h1>
                 <div className="list-news">
                     {listNews.length > 0
-                        ? listNews.map((item) => 
-                            <NewsItem 
-                                title={item.title} 
+                        ? listNews.map((item) =>
+                            <NewsItem
+                                title={item.title}
                                 image_url={item.image_url}
                                 url={item.url}
+                                posted_date={item.posted_date}
                                 id={item.id}
                                 summary={item.summary}
                             />)

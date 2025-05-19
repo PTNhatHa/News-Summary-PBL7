@@ -26,6 +26,7 @@ python -m venv .venv
 
 ```sh
 pip install fastapi uvicorn sqlalchemy pymysql alembic pydantic python-dotenv  
+pip install requests beautifulsoup4 selenium webdriver-manager torch transformers numpy feedparser  
 ```
 
 ### Chạy BE
@@ -41,3 +42,9 @@ uvicorn app.main:app --reload
 http://127.0.0.1:8000/docs# 
 ```
 
+### Migration
+
+```sh
+alembic revision --autogenerate -m "tên commit, vd: add posted_date to articles"
+alembic upgrade head
+```

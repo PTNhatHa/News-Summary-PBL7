@@ -52,3 +52,6 @@ dmypy.json
 # Frontend dependencies (if using node)
 frontend/node_modules/
 frontend/dist/
+
+# Ignore model files
+backend/app/models/vit5-summarization-v2/

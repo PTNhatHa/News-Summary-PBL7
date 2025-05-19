@@ -6,7 +6,6 @@ from datetime import datetime
 
 class ArticleBase(BaseModel):
     title: str
-    content: str
     image_url: Optional[str]
     url: str
     posted_date: datetime
