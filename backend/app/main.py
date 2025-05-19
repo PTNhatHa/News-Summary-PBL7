@@ -1,5 +1,6 @@
 # app/main.py
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api import articles
 from app.models import models
 from app.database import engine, SessionLocal, Base
@@ -20,4 +21,12 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+# Cho phép tất cả origin (không nên dùng trong production)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # hoặc ["*"] để cho tất cả
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(articles.router, prefix="/api")

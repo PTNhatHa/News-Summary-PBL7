@@ -8,7 +8,6 @@ class Article(Base):
     __tablename__ = 'articles'
     id = Column(Integer, primary_key=True)
     title = Column(String(512))
-    content = Column(Text)
     image_url = Column(String(512))
     url = Column(String(512), unique=True)
     posted_date = Column(DateTime)
@@ -31,3 +30,8 @@ class Feedback(Base):
     like = Column(Boolean, default=False)
     dislike = Column(Boolean, default=False)
     summary = relationship("Summary", back_populates="feedbacks")
+
+class CrawlLog(Base):
+    __tablename__ = "crawl_log"
+    source = Column(String, primary_key=True)
+    last_crawled = Column(DateTime, default=datetime.now)

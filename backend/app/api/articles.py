@@ -20,10 +20,9 @@ def get_articles(db: Session = Depends(get_db)):
         results.append(ArticleOut(
             id=article.id,
             title=article.title,
-            content=article.content,
             image_url=article.image_url,
             url=article.url,
-            posted_date=article.posted_date or article.created_at,
+            posted_date=article.posted_date,
             summary=summary.text if summary else None
         ))
 
