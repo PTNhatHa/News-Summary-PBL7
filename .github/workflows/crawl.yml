@@ -1,0 +1,29 @@
+name: Run Crawler Every 6 Hours
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Mỗi 6 tiếng: 7h, 13h, 19h, 1h
+  workflow_dispatch:       # Cho phép chạy thủ công từ GitHub UI
+
+jobs:
+  run-crawler:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run pipeline
+      run: python app/run_pipeline.py
