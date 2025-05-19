@@ -14,7 +14,6 @@ import time
 import re
 from datetime import datetime, timezone
 
-from utils.db_utils import get_last_crawl_date, update_last_crawl_date
 from database import SessionLocal
 from utils.crawlers.categories import CATEGORIES
 
@@ -68,7 +67,15 @@ def get_articles_by_category(category_name, category_url, last_date):
     options.add_argument("--window-size=1920,1080")
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    driver.get(category_url)
+
+    try:
+        driver.get(category_url)
+    except Exception as e:
+        print(f"[!] Lỗi khi mở danh mục {category_url}: {e}")
+        driver.quit()
+        return []
+
+    print("Crawl from: ", category_url)
     time.sleep(2)
     
     articles = []
@@ -76,7 +83,11 @@ def get_articles_by_category(category_name, category_url, last_date):
     
     while True:
         url = f"{category_url}?paged={current_page}"
-        driver.get(url)
+        try:
+            driver.get(url)
+        except Exception as e:
+            print(f"[!] Lỗi khi truy cập {url}: {e}")
+            break
         time.sleep(3)
         
         try:
@@ -107,9 +118,6 @@ def get_articles_by_category(category_name, category_url, last_date):
                 title_elem = title_elem[0]
                 title = title_elem.text.strip()
                 link = title_elem.get_attribute("href")
-
-                description_elem = item.find_elements(By.CSS_SELECTOR, ".lead")
-                description = description_elem[0].text.strip() if description_elem else ""
 
                 img_elem = item.find_elements(By.CSS_SELECTOR, ".m-avatar img")
                 thumbnail = img_elem[0].get_attribute("src") if img_elem else ""
@@ -150,12 +158,9 @@ def get_articles_by_category(category_name, category_url, last_date):
     driver.quit()
     return articles
 
-def crawl_baodanang():
+def crawl_baodanang(last_date):
     categories = CATEGORIES['baodanang']
     all_articles = []
-    db = SessionLocal()
-    last_date = get_last_crawl_date(db, "baodanang").replace(microsecond=0, tzinfo=timezone.utc)
-
     selected_categories = list(categories.items())[:]
     for name, url in selected_categories:
         all_articles.extend(get_articles_by_category(name, url, last_date))
@@ -164,6 +169,5 @@ def crawl_baodanang():
     unique_articles = {article['url']: article for article in all_articles}
     all_articles = list(unique_articles.values())
 
-    update_last_crawl_date(db, "baodanang")
-    db.close()
+    print(f"Crawl {len(all_articles)} bài từ Báo Đà Nẵng")
     return all_articles

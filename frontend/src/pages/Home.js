@@ -11,9 +11,10 @@ const Home = () => {
     useEffect(() => {
         newsService.getNews()
             .then((response) => {
-                console.log("zoooooo");
-                console.log(response.data);
-                setListNews(response.data)
+                const sortedData = response.data.sort((a, b) =>
+                    new Date(b.posted_date) - new Date(a.posted_date)
+                )
+                setListNews(sortedData)
             })
             .catch((error) => console.log(error))
 

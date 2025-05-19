@@ -26,7 +26,12 @@ load_dotenv(dotenv_path=env_path)
 DATABASE_URL = "postgresql://postgres:IvIJyAtnqkbrVoYTJsauWEOYlWceNTZO@interchange.proxy.rlwy.net:29037/railway"
 
 # SQLAlchemy engine và session
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(DATABASE_URL, 
+                       echo=True,
+                       pool_pre_ping=True, # kiểm tra kết nối trước mỗi query
+                        pool_recycle=1800, # tái tạo kết nối sau 30 phút
+                        pool_timeout=30, # thời gian chờ kết nối tối đa là 30s
+                       )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

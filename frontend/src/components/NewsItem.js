@@ -2,13 +2,20 @@ import DefaultImg from '../assets/DefaultImg.jpg'
 import "../styles/style.css"
 import { LuClock } from "react-icons/lu";
 import { BiLike, BiDislike } from "react-icons/bi";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 
 const NewsItem = ({ title, content, image_url, url, posted_date, id, summary }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
 
+    useEffect(() => {
+        if (openOverlay && url) {
+            window.open(url, "_blank", "noopener,noreferrer")
+        }
+    }, [openOverlay])
+    
     return (
         <>
             <article key={id} className="wrap-news-item" onClick={() => setOpenOverlay(true)}>
@@ -18,7 +25,7 @@ const NewsItem = ({ title, content, image_url, url, posted_date, id, summary }) 
                     <p className='description'>{summary}</p>
                     <span className="date">
                         <LuClock size={16} />
-                        {posted_date}
+                        {dayjs(posted_date).format("HH:mm DD/MM/YYYY")}
                     </span>
                 </div>
             </article>
@@ -26,7 +33,10 @@ const NewsItem = ({ title, content, image_url, url, posted_date, id, summary }) 
                 <div className='overlay'>
                     <div className='wrap-dialog'>
                         <h2>Bạn có hài lòng với đoạn tóm tắt này không?</h2>
-                        <p>Nguồn bài viết: <span className='content-url'>Phim 'Nàng Bạch Tuyết' nhận mưa lời khen</span></p>
+                        <p>
+                            {"Nguồn bài viết: "}
+                            <a href={url} className='content-url' target="_blank" rel="noopener noreferrer">{title}</a>
+                        </p>
                         <div className='wrap-feedback'>
                             <p>{summary}</p>
                             <div className='divide' />
@@ -59,7 +69,7 @@ const NewsItem = ({ title, content, image_url, url, posted_date, id, summary }) 
                             </div>
                         </div>
                         <div className='wrap-bottom'>
-                            <button className='btn btn-cancel' onClick={() => setOpenOverlay(false)}>Hủy</button>
+                            <button className='btn btn-cancel' onClick={() => setOpenOverlay(false)}>Đóng</button>
                             <button className='btn btn-feedback'>Gửi đánh giá</button>
                         </div>
                     </div>
