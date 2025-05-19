@@ -3,12 +3,17 @@ from bs4 import BeautifulSoup
 from datetime import timezone
 from email.utils import parsedate_to_datetime
 import requests
+import socket
+import time
 
 from utils.db_utils import get_last_crawl_date, update_last_crawl_date
 from database import SessionLocal
 from utils.crawlers.categories import CATEGORIES
 
-def get_articles_by_category(category_name, category_url, last_date):    
+def get_articles_by_category(category_name, category_url, last_date):  
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }  
     feed = feedparser.parse(category_url)
     data = []
     
@@ -40,7 +45,13 @@ def get_articles_by_category(category_name, category_url, last_date):
             if enclosure.get("type", "").startswith("image") and enclosure.get("url"):
                 thumbnail = enclosure["url"]
 
-        response = requests.get(entry.link, timeout=10)
+        try:
+            response = requests.get(entry.link, headers=headers, timeout=(5, 10))
+            response.raise_for_status()
+        except (requests.RequestException, requests.Timeout, socket.error, ConnectionResetError) as e:
+            print(f"Lỗi khi tải {entry.link}: {e}")
+            continue
+
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, "html.parser")
             content_div = soup.find("div", class_="detail-content")
@@ -70,15 +81,14 @@ def get_articles_by_category(category_name, category_url, last_date):
                 "image_url": thumbnail,
                 "category_name": category_name,
             })  
+            time.sleep(1.5)
 
     return data
 
-def crawl_tuoitre():
+def crawl_tuoitre(last_date):
     categories = CATEGORIES['tuoitre']
     all_articles = []
-    db = SessionLocal()
-    last_date = get_last_crawl_date(db, "tuoitre").replace(microsecond=0, tzinfo=timezone.utc)
-
+    
     selected_categories = list(categories.items())[:]
     for name, url in selected_categories:
         all_articles.extend(get_articles_by_category(name, url, last_date))
@@ -86,7 +96,6 @@ def crawl_tuoitre():
     # Xử lý duplicate url
     unique_articles = {article['url']: article for article in all_articles}
     all_articles = list(unique_articles.values())
-
-    update_last_crawl_date(db, "tuoitre")
-    db.close()
+    
+    print(f"Crawl {len(all_articles)} bài từ Báo Tuổi Trẻ")
     return all_articles

@@ -6,55 +6,84 @@ from database import SessionLocal
 from utils.crawlers import vnexpress, tuoitre, baodanang
 from models import models
 from models.summarizer import Summarizer
-from datetime import datetime
+from datetime import datetime, timezone
+from time import time
+from utils.db_utils import get_last_crawl_date, update_last_crawl_date
 
 summarizer = Summarizer()
 
 def pipeline():
+    start_time = time()
     db = SessionLocal()
     inserted = 0
-    # Crawl
-    articles = []
-    articles.extend(vnexpress.crawl_vnexpress())
-    articles.extend(tuoitre.crawl_tuoitre())
-    articles.extend(baodanang.crawl_baodanang())
-
-    for article in articles[:]:
-        # Check bài viết đã tồn tại
-        if db.query(models.Article).filter_by(url=article['url']).first():
-            continue
-        
-        # Sinh tóm tắt
-        try:
-            summary_text = summarizer.summarize(article['content'], article['category_name'])
-            print("\nTóm tắt: ", summary_text)
-        except Exception as e:
-            print(f"Lỗi khi tóm tắt bài: {article['url']}: {e}")
-            continue
-        
-        # Thêm vào Article
-        new_article = models.Article(
-            title = article['title'],
-            image_url = article['image_url'],
-            url = article['url'],
-            posted_date = article['posted_date'],
-            created_at=datetime.now()
-        )
-        db.add(new_article)
-        db.flush()
-
-        # Thêm vào Summary
-        new_summary = models.Summary(
-            article_id = new_article.id,
-            text = summary_text,
-            created_at = datetime.now()
-        )
-        db.add(new_summary)
-        inserted += 1
     
-    db.commit()
-    db.close()
-    print(f"Đã lưu {inserted} bài và tóm tắt.")
+    try:
+        # Crawl
+        articles = []
+
+        last_date_vnexpress = get_last_crawl_date(db, "vnexpress").replace(microsecond=0, tzinfo=timezone.utc)
+        print(f"\n\n--------------------LAST DATE CRAWL VNEXPRESS: {last_date_vnexpress}--------------------\n\n")
+        articles.extend(vnexpress.crawl_vnexpress(last_date_vnexpress))
+        update_last_crawl_date(db, "vnexpress")
+
+        # Báo Tuổi Trẻ
+        last_date_tuoitre = get_last_crawl_date(db, "tuoitre").replace(microsecond=0, tzinfo=timezone.utc)
+        print(f"\n\n--------------------LAST DATE CRAWL BAO TUOI TRE: {last_date_tuoitre}--------------------\n\n")
+        articles.extend(tuoitre.crawl_tuoitre(last_date_tuoitre))
+        update_last_crawl_date(db, "tuoitre")
+
+        # Báo Đà Nẵng
+        last_date_baodanang = get_last_crawl_date(db, "baodanang").replace(microsecond=0, tzinfo=timezone.utc)
+        print(f"\n\n--------------------LAST DATE CRAWL BAODANANG: {last_date_baodanang}--------------------\n\n")
+        articles.extend(baodanang.crawl_baodanang(last_date_baodanang))
+        update_last_crawl_date(db, "baodanang")
+
+        for article in articles[:]:
+            summary_text = ""
+            # Check bài viết đã tồn tại
+            if db.query(models.Article).filter_by(url=article['url']).first():
+                continue
+            
+            # Sinh tóm tắt
+            try:
+                summary_text = summarizer.summarize(article['content'], article['category_name'])
+            except Exception as e:
+                print(f"Lỗi khi tóm tắt bài: {article['url']}: {e}")
+                continue
+            
+            # Thêm vào Article
+            new_article = models.Article(
+                title = article['title'],
+                image_url = article['image_url'],
+                url = article['url'],
+                posted_date = article['posted_date'],
+                created_at=datetime.now()
+            )
+            db.add(new_article)
+            db.flush()
+
+            # Thêm vào Summary
+            new_summary = models.Summary(
+                article_id = new_article.id,
+                text = summary_text,
+                created_at = datetime.now()
+            )
+            db.add(new_summary)
+            inserted += 1
+        
+        db.commit()
+        db.close()
+        print(f"Đã lưu {inserted} bài và tóm tắt.")
+
+        end_time = time()  # Kết thúc đo thời gian
+        elapsed = end_time - start_time
+        print(f"Tổng thời gian chạy: {elapsed:.2f} giây.")
+
+    except Exception as e:
+        db.rollback()
+        print(f"Lỗi: {e}")
+    finally:
+        db.close()
 
 if __name__ == "__main__":
     pipeline()

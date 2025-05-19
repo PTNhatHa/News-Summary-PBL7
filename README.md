@@ -26,7 +26,7 @@ python -m venv .venv
 
 ```sh
 pip install fastapi uvicorn sqlalchemy pymysql alembic pydantic python-dotenv  
-pip install requests beautifulsoup4 selenium webdriver-manager torch transformers numpy feedparser  
+pip install requests beautifulsoup4 selenium webdriver-manager torch transformers numpy feedparser gdown time  
 ```
 
 ### Chạy BE
@@ -47,4 +47,10 @@ http://127.0.0.1:8000/docs#
 ```sh
 alembic revision --autogenerate -m "tên commit, vd: add posted_date to articles"
 alembic upgrade head
+```
+
+### Chạy test pipeline
+
+```sh
+python app/run_pipeline.py  
 ```

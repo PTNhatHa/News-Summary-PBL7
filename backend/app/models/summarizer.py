@@ -23,12 +23,8 @@ class Summarizer:
     def __init__(self):
         download_model_from_drive()
         model_path = Path("./app/models/vit5-summarization-v2").resolve().as_posix()
-        print("Model path:", model_path)
-        print("Exists:", os.path.exists(model_path))
-        print("Files:", os.listdir(model_path))
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        
         self.tokenizer = AutoTokenizer.from_pretrained(str(model_path), local_files_only=True)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(str(model_path), local_files_only=True).to(self.device)
 

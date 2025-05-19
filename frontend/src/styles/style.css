@@ -13,7 +13,7 @@
 
 /* Body */
 .body {
-    margin: 1em 10em;
+    margin: 1em 12em;
     display: flex;
     flex-direction: column;
     gap: 0.625em;
@@ -63,13 +63,15 @@ input {
 }
 
 .thumbnail {
-    width: 25%;
+    width: 200px;
     border-radius: 0.5em;
     border: 0.01em var(--light-grey) solid;
+    object-fit: cover;
 }
 
 .wrap-content {
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: 0.625em;
 }
@@ -191,4 +193,22 @@ input {
 .btn:hover {
     transform: scale(1.03);
     cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+    .body {
+        margin: 1em 5em;
+        display: flex;
+        flex-direction: column;
+        gap: 0.625em;
+    }
+}
+
+@media (max-width: 768px) {
+    .thumbnail {
+        width: 150px;
+        border-radius: 0.5em;
+        border: 0.01em var(--light-grey) solid;
+        object-fit: cover;
+    }
 }
