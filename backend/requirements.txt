@@ -19,3 +19,5 @@ transformers
 numpy
 
 gdown
+psycopg2-binary
+
