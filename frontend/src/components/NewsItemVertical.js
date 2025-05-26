@@ -1,15 +1,10 @@
-import DefaultImg from '../assets/DefaultImg.jpg'
-import LogoBaoDN from '../assets/LogoBaoDN.png'
-import LogoBaoTuoiTre from '../assets/LogoBaoTuoiTre.png'
-import LogoVNExpress from '../assets/LogoVNExpress.png'
-
 import "../styles/style.css"
 import { LuClock } from "react-icons/lu";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
-const NewsItem = ({ title, content, image_url, url, posted_date, id, summary, source = "DaNang" }) => {
+const NewsItemVertical = ({ title, image_url, url, posted_date, id, summary }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
@@ -22,27 +17,22 @@ const NewsItem = ({ title, content, image_url, url, posted_date, id, summary, so
 
     return (
         <>
-            <article key={id} className="wrap-news-item" onClick={() => setOpenOverlay(true)}>
+            <article key={id} className="wrap-news-item-vertical" onClick={() => setOpenOverlay(true)}>
                 <div
                     style={{
                         backgroundImage: "url('https://i.pinimg.com/736x/5e/60/19/5e60199ad2032df68c5385e230a241a8.jpg')",
                     }}
-                    className='thumbnail'
+                    className='thumbnail-vertical'
                 >
-                    <div className="category-name category-name-black" style={{ fontSize: '11px' }}>Thời sự</div>
+                    <div className="category-name category-name-black">Thời sự</div>
                 </div>
                 <div className='wrap-content'>
                     <h2>{title}</h2>
                     <p className='description'>{summary}</p>
-                    <div className='date-source'>
-                        <span className="date">
-                            <LuClock size={16} />
-                            {dayjs(posted_date).format("HH:mm DD/MM/YYYY")}
-                        </span>
-                        <div className="category-name category-name-white" style={{ fontSize: '11px' }}>
-                            <img src={source == "DaNang" ? LogoBaoDN : source == "VNExpress" ? LogoVNExpress : LogoBaoTuoiTre} />
-                        </div>
-                    </div>
+                    <span className="date">
+                        <LuClock size={16} />
+                        {dayjs(posted_date).format("HH:mm DD/MM/YYYY")}
+                    </span>
                 </div>
             </article>
             {openOverlay &&
@@ -95,4 +85,4 @@ const NewsItem = ({ title, content, image_url, url, posted_date, id, summary, so
     )
 }
 
-export default NewsItem
+export default NewsItemVertical
