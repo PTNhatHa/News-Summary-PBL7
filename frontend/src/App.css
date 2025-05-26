@@ -1,17 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 
 :root {
-  --main-color: rgb(42, 140, 189);
-  --main-ligth-color: rgb(192, 221, 236);
+  --main-color: rgb(38 , 50, 56);
   --light-grey: rgb(240, 242, 245);
-  --light-grey-x2: rgb(247, 248, 249);
   --dark-grey: rgb(101, 104, 108);
-  --black: rgb(0, 0, 0);
-  --white: rgb(255, 255, 255);
-  --green: rgb(148, 221, 179);
-  --red: rgb(235, 146, 146);
-  --dark-red: rgb(216, 38, 39);
-  --yellow: rgb(255, 249, 132);
 }
 
 * {

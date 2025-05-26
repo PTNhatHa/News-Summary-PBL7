@@ -21,8 +21,6 @@ const Home = () => {
     }, [])
     return (
         <>
-            {/* Header */}
-            <Header />
             {/* Body */}
             <div className="body">
                 <div className="container-search">
