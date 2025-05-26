@@ -12,6 +12,8 @@ class Article(Base):
     url = Column(String(512), unique=True)
     posted_date = Column(DateTime)
     created_at = Column(DateTime, default=datetime.now)
+    category = Column(String(512))  # Ví dụ: 'Thời sự', 'Kinh tế'
+    source = Column(String(512))    # Ví dụ: 'VNExpress', 'Tuổi Trẻ'
     summary = relationship("Summary", back_populates="article", uselist=False)
 
 class Summary(Base):
