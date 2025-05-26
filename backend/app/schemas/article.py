@@ -9,6 +9,8 @@ class ArticleBase(BaseModel):
     image_url: Optional[str]
     url: str
     posted_date: datetime
+    category: str
+    source: str
 
 class ArticleCreate(ArticleBase):
     pass
