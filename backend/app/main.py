@@ -1,8 +1,7 @@
 # app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import articles
-from app.api import retriever
+from app.api import articles, retriever, feedbacks
 from app.models import models
 from app.database import engine, SessionLocal, Base
 from app.utils.create_data import create_fake_data
@@ -32,3 +31,4 @@ app.add_middleware(
 )
 app.include_router(articles.router, prefix="/api")
 app.include_router(retriever.router, prefix="/api")
+app.include_router(feedbacks.router, prefix="/api")
