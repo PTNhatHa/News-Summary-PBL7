@@ -40,7 +40,7 @@ const NewsItem = ({ title, image_url, url, posted_date, id, summary, source = "D
                             {dayjs(posted_date).format("HH:mm DD/MM/YYYY")}
                         </span>
                         <div className="category-name category-name-white" style={{ fontSize: '11px' }}>
-                            <img src={source == "DaNang" ? LogoBaoDN : source == "VNExpress" ? LogoVNExpress : LogoBaoTuoiTre} />
+                            <img src={source == "Đà Nẵng" ? LogoBaoDN : source == "VNExpress" ? LogoVNExpress : LogoBaoTuoiTre} />
                         </div>
                     </div>
                 </div>

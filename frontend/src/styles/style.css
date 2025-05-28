@@ -265,6 +265,13 @@
     padding: 1.5em 0;
 }
 
+/* Source page */
+.wrap-todaynews {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+}
+
 /* Body */
 .body {
     margin: 1em 12em;

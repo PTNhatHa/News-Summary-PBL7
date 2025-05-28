@@ -3,8 +3,11 @@ import { LuClock } from "react-icons/lu";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import LogoBaoDN from '../assets/LogoBaoDN.png'
+import LogoBaoTuoiTre from '../assets/LogoBaoTuoiTre.png'
+import LogoVNExpress from '../assets/LogoVNExpress.png'
 
-const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, summary }) => {
+const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, summary, source }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
@@ -29,10 +32,19 @@ const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, su
                 <div className='wrap-content'>
                     <h2>{title}</h2>
                     <p className='description'>{summary}</p>
-                    <span className="date">
+                    {/* <span className="date">
                         <LuClock size={16} />
                         {dayjs(posted_date).format("HH:mm DD/MM/YYYY")}
-                    </span>
+                    </span> */}
+                    <div className='date-source'>
+                        <span className="date">
+                            <LuClock size={16} />
+                            {dayjs(posted_date).format("HH:mm DD/MM/YYYY")}
+                        </span>
+                        <div className="category-name category-name-white" style={{ fontSize: '11px' }}>
+                            <img src={source == "Đà Nẵng" ? LogoBaoDN : source == "VNExpress" ? LogoVNExpress : LogoBaoTuoiTre} />
+                        </div>
+                    </div>
                 </div>
             </article>
             {openOverlay &&

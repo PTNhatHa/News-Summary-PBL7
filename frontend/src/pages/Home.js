@@ -7,6 +7,7 @@ import newsService from "../services/newsService"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { useCategories } from "../context/CategoryContext "
 
 const settings = {
     dots: true,
@@ -44,11 +45,12 @@ const settings = {
 };
 
 const Home = () => {
+    const { listCategories } = useCategories()
     const [ListHotNews, setListHotNews] = useState([])
     const [ListVNExpress, setListVNExpress] = useState([])
     const [ListTuoiTre, setListTuoiTre] = useState([])
     const [ListDaNang, setListDaNang] = useState([])
-    const [curentCategory, setCurentCategory] = useState("Tất cả")
+    const [curentCategory, setCurentCategory] = useState(-1)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -62,30 +64,30 @@ const Home = () => {
                 ] = await Promise.all([
                     newsService.getNews({
                         skip: 0,
-                        limit: 4,
+                        limit: 3,
                         date: today,
-                        category: curentCategory == "Tất cả" ? "" : curentCategory
+                        category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     }),
                     newsService.getNews({
                         skip: 0,
                         limit: 12,
                         date: today,
                         source: "VNExpress",
-                        category: curentCategory == "Tất cả" ? "" : curentCategory
+                        category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     }),
                     newsService.getNews({
                         skip: 0,
                         limit: 12,
                         date: today,
                         source: "Tuổi Trẻ",
-                        category: curentCategory == "Tất cả" ? "" : curentCategory
+                        category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     }),
                     newsService.getNews({
                         skip: 0,
                         limit: 12,
                         date: today,
                         source: "Đà Nẵng",
-                        category: curentCategory == "Tất cả" ? "" : curentCategory
+                        category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     })
                 ])
                 setListHotNews(responseHotNews.data.articles)
@@ -100,7 +102,7 @@ const Home = () => {
     }, [curentCategory])
     return (
         <>
-            <CategoriesBar setCurentCategory={setCurentCategory} />
+            <CategoriesBar curentCategory={curentCategory} setCurentCategory={setCurentCategory} />
             <HotNews ListHotNews={ListHotNews} />
             <div className="container-news-souce">
                 <p className="title">BÁO VNEXPRESS</p>
@@ -117,6 +119,7 @@ const Home = () => {
                                     category={item.category}
                                     id={item.id}
                                     summary={item.summary}
+                                    source={item.source}
                                 />
                             </div>
                         )}
@@ -133,6 +136,7 @@ const Home = () => {
                                 category={item.category}
                                 id={item.id}
                                 summary={item.summary}
+                                source={item.source}
                             />
                         )}
                     </Slider>
@@ -153,6 +157,7 @@ const Home = () => {
                                     category={item.category}
                                     id={item.id}
                                     summary={item.summary}
+                                    source={item.source}
                                 />
                             </div>
                         )}
@@ -169,6 +174,7 @@ const Home = () => {
                                 category={item.category}
                                 id={item.id}
                                 summary={item.summary}
+                                source={item.source}
                             />
                         )}
                     </Slider>
@@ -189,6 +195,7 @@ const Home = () => {
                                     category={item.category}
                                     id={item.id}
                                     summary={item.summary}
+                                    source={item.source}
                                 />
                             </div>
                         )}
@@ -205,6 +212,7 @@ const Home = () => {
                                 category={item.category}
                                 id={item.id}
                                 summary={item.summary}
+                                source={item.source}
                             />
                         )}
                     </Slider>
