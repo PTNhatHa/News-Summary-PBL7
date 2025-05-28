@@ -1,42 +1,214 @@
 import HotNews from "../components/HotNews"
 import NewsItemVertical from "../components/NewsItemVertical"
+import CategoriesBar from "../components/Categoriesbar"
 import "../styles/style.css"
+import { useEffect, useState } from "react"
+import newsService from "../services/newsService"
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
-const Home = () => {
-    const ListHotNews = [
+const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    autoplay: true,              //  Bật auto chạy
+    autoplaySpeed: 3000,         //  3 giây 1 lần
+    pauseOnHover: true,          //  Dừng khi hover
+    responsive: [
         {
-
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+            }
+        },
+        {
+            breakpoint: 768,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+            }
+        },
+        {
+            breakpoint: 480,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+            }
         }
     ]
+};
+
+const Home = () => {
+    const [ListHotNews, setListHotNews] = useState([])
+    const [ListVNExpress, setListVNExpress] = useState([])
+    const [ListTuoiTre, setListTuoiTre] = useState([])
+    const [ListDaNang, setListDaNang] = useState([])
+    const [curentCategory, setCurentCategory] = useState("Tất cả")
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const today = "2025-05-25"
+            try {
+                const [
+                    responseHotNews,
+                    responseVNExpress,
+                    responseTuoiTre,
+                    responseDaNang
+                ] = await Promise.all([
+                    newsService.getNews({
+                        skip: 0,
+                        limit: 4,
+                        date: today,
+                        category: curentCategory == "Tất cả" ? "" : curentCategory
+                    }),
+                    newsService.getNews({
+                        skip: 0,
+                        limit: 12,
+                        date: today,
+                        source: "VNExpress",
+                        category: curentCategory == "Tất cả" ? "" : curentCategory
+                    }),
+                    newsService.getNews({
+                        skip: 0,
+                        limit: 12,
+                        date: today,
+                        source: "Tuổi Trẻ",
+                        category: curentCategory == "Tất cả" ? "" : curentCategory
+                    }),
+                    newsService.getNews({
+                        skip: 0,
+                        limit: 12,
+                        date: today,
+                        source: "Đà Nẵng",
+                        category: curentCategory == "Tất cả" ? "" : curentCategory
+                    })
+                ])
+                setListHotNews(responseHotNews.data.articles)
+                setListVNExpress(responseVNExpress.data.articles)
+                setListTuoiTre(responseTuoiTre.data.articles)
+                setListDaNang(responseDaNang.data.articles)
+            } catch (error) {
+                console.error("Lỗi get articles: ", error);
+            }
+        }
+        fetchData()
+    }, [curentCategory])
     return (
         <>
-            <HotNews />
+            <CategoriesBar setCurentCategory={setCurentCategory} />
+            <HotNews ListHotNews={ListHotNews} />
             <div className="container-news-souce">
                 <p className="title">BÁO VNEXPRESS</p>
-                <div className="list-news-vertical">
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                </div>
+                {ListVNExpress.length < 4 ?
+                    <div {...settings} className="list-news-vertical">
+                        {ListVNExpress?.map((item) =>
+                            <div style={{ width: '25%' }}>
+                                <NewsItemVertical
+                                    key={item.id}
+                                    title={item.title}
+                                    image_url={item.image_url}
+                                    url={item.url}
+                                    posted_date={item.posted_date}
+                                    category={item.category}
+                                    id={item.id}
+                                    summary={item.summary}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    :
+                    <Slider {...settings} className="list-news-vertical">
+                        {ListVNExpress?.map((item) =>
+                            <NewsItemVertical
+                                key={item.id}
+                                title={item.title}
+                                image_url={item.image_url}
+                                url={item.url}
+                                posted_date={item.posted_date}
+                                category={item.category}
+                                id={item.id}
+                                summary={item.summary}
+                            />
+                        )}
+                    </Slider>
+                }
             </div>
             <div className="container-news-souce">
                 <p className="title">BÁO TUỔI TRẺ</p>
-                <div className="list-news-vertical">
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                </div>
+                {ListTuoiTre.length < 4 ?
+                    <div {...settings} className="list-news-vertical">
+                        {ListTuoiTre?.map((item) =>
+                            <div style={{ width: '25%' }}>
+                                <NewsItemVertical
+                                    key={item.id}
+                                    title={item.title}
+                                    image_url={item.image_url}
+                                    url={item.url}
+                                    posted_date={item.posted_date}
+                                    category={item.category}
+                                    id={item.id}
+                                    summary={item.summary}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    :
+                    <Slider {...settings} className="list-news-vertical">
+                        {ListTuoiTre?.map((item) =>
+                            <NewsItemVertical
+                                key={item.id}
+                                title={item.title}
+                                image_url={item.image_url}
+                                url={item.url}
+                                posted_date={item.posted_date}
+                                category={item.category}
+                                id={item.id}
+                                summary={item.summary}
+                            />
+                        )}
+                    </Slider>
+                }
             </div>
             <div className="container-news-souce">
                 <p className="title">BÁO ĐÀ NẴNG</p>
-                <div className="list-news-vertical">
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                    <NewsItemVertical title={"Tiêu đề"} summary={"Tóm tắt nè"} />
-                </div>
+                {ListDaNang.length < 4 ?
+                    <div {...settings} className="list-news-vertical">
+                        {ListDaNang?.map((item) =>
+                            <div style={{ width: '25%' }}>
+                                <NewsItemVertical
+                                    key={item.id}
+                                    title={item.title}
+                                    image_url={item.image_url}
+                                    url={item.url}
+                                    posted_date={item.posted_date}
+                                    category={item.category}
+                                    id={item.id}
+                                    summary={item.summary}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    :
+                    <Slider {...settings} className="list-news-vertical">
+                        {ListDaNang?.map((item) =>
+                            <NewsItemVertical
+                                key={item.id}
+                                title={item.title}
+                                image_url={item.image_url}
+                                url={item.url}
+                                posted_date={item.posted_date}
+                                category={item.category}
+                                id={item.id}
+                                summary={item.summary}
+                            />
+                        )}
+                    </Slider>
+                }
             </div>
         </>
     )

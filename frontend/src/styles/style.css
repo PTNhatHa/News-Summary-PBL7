@@ -41,6 +41,8 @@
     border: none;
     background-color: white;
     border-bottom: 0.125em solid white;
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
 .header-btn:hover {
@@ -127,6 +129,7 @@
     color: var(--light-grey);
     padding: 0.5em 1em;
     border-radius: 9999px;
+    transition: all 0.3s ease;
 }
 
 .category-item:hover {
@@ -238,8 +241,9 @@
 }
 
 .list-news-vertical {
-    width: 100%;
+    /* width: 100%; */
     display: flex;
+    flex-wrap: wrap;
     gap: 0.625em;
 }
 
@@ -308,19 +312,25 @@ input {
 }
 
 .wrap-news-item-vertical {
+    margin: 0.5em;
+    border-radius: 0.5em;
+    display: flex;
     flex-direction: column;
     flex: 1;
+    box-sizing: border-box;
+    gap: 0.5em;
+    transition: all 0.3s ease;
 }
 
+.wrap-news-item-vertical:hover,
 .left-hot-news:hover,
 .wrap-news-item:hover {
     cursor: pointer;
-    transform: scale(1.01);
+    transform: scale(1.02);
 }
 
 .thumbnail {
-    aspect-ratio: 3 / 2;
-    height: 100%;
+    width: 25%;
     border-radius: 0.5em;
     border: 0.01em var(--light-grey) solid;
     background-size: cover;
@@ -347,6 +357,7 @@ input {
 
 .wrap-content>.description {
     color: var(--dark-grey);
+    text-align: justify;
 }
 
 .date {
@@ -373,7 +384,7 @@ input {
 
 .wrap-dialog {
     padding: 1.5em;
-    background-color: var(--white);
+    background-color: white;
     border-radius: 1em;
     display: flex;
     align-items: center;
@@ -397,6 +408,7 @@ input {
     border-radius: 0.5em;
     padding: 1.5em;
     display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -448,7 +460,7 @@ input {
 
 .btn-feedback {
     background-color: var(--main-color);
-    color: var(--white);
+    color: white;
 }
 
 .btn:hover {

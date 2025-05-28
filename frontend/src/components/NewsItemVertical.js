@@ -4,7 +4,7 @@ import { BiLike, BiDislike } from "react-icons/bi";
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
-const NewsItemVertical = ({ title, image_url, url, posted_date, id, summary }) => {
+const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, summary }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
@@ -20,11 +20,11 @@ const NewsItemVertical = ({ title, image_url, url, posted_date, id, summary }) =
             <article key={id} className="wrap-news-item-vertical" onClick={() => setOpenOverlay(true)}>
                 <div
                     style={{
-                        backgroundImage: "url('https://i.pinimg.com/736x/5e/60/19/5e60199ad2032df68c5385e230a241a8.jpg')",
+                        backgroundImage: `url(${image_url ? image_url : 'https://i.pinimg.com/736x/5e/60/19/5e60199ad2032df68c5385e230a241a8.jpg'})`,
                     }}
                     className='thumbnail-vertical'
                 >
-                    <div className="category-name category-name-black">Thời sự</div>
+                    <div className="category-name category-name-black">{category}</div>
                 </div>
                 <div className='wrap-content'>
                     <h2>{title}</h2>

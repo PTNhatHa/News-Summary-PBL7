@@ -9,7 +9,7 @@ import { BiLike, BiDislike } from "react-icons/bi";
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
-const NewsItem = ({ title, content, image_url, url, posted_date, id, summary, source = "DaNang" }) => {
+const NewsItem = ({ title, image_url, url, posted_date, id, summary, source = "DaNang" }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
@@ -25,7 +25,7 @@ const NewsItem = ({ title, content, image_url, url, posted_date, id, summary, so
             <article key={id} className="wrap-news-item" onClick={() => setOpenOverlay(true)}>
                 <div
                     style={{
-                        backgroundImage: "url('https://i.pinimg.com/736x/5e/60/19/5e60199ad2032df68c5385e230a241a8.jpg')",
+                        backgroundImage: `url(${image_url ? image_url : 'https://i.pinimg.com/736x/5e/60/19/5e60199ad2032df68c5385e230a241a8.jpg'})`,
                     }}
                     className='thumbnail'
                 >

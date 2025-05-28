@@ -35,6 +35,10 @@ def get_article_details(article_url):
 
             soup = BeautifulSoup(response.text, "html.parser")
 
+            # Tiêu đề bài viết
+            title_tag = soup.find("h1")
+            title = title_tag.get_text(strip=True) if title_tag else ""
+
             # Ngày đăng
             date_tag = soup.find("span", class_="date")
             date = date_tag.text.strip() if date_tag else ""
@@ -55,9 +59,10 @@ def get_article_details(article_url):
             content = "\n".join(contents) if contents else ""
             content = content.replace(' Ảnh:', '')
             # Nếu không có content thì return None
-            if not content.strip() or not date.strip():
+            if not title or not content.strip() or not date.strip():
                 return None
             return {
+                "title": title, 
                 "posted_date": date, 
                 "content": content
                 }
@@ -94,10 +99,6 @@ def get_articles_by_category(category_name, category_url, last_date):
                     if link in collected_links:  # Kiểm tra nếu link đã tồn tại
                         continue
 
-                    title = item.text.strip()
-                    if not title:
-                        continue
-                    
                     try:
                         article = item.find_element(By.XPATH, "./ancestor::article")
 
@@ -108,8 +109,9 @@ def get_articles_by_category(category_name, category_url, last_date):
                         thumbnail = None
 
                     content = get_article_details(link)
-                    if not content or not content["posted_date"]:
+                    if not content:
                         continue
+
                     if content["posted_date"]:
                         match = re.search(r'(\d{1,2})/(\d{1,2})/(\d{4}), (\d{1,2}):(\d{2})', content["posted_date"])
                         if match:
@@ -125,7 +127,7 @@ def get_articles_by_category(category_name, category_url, last_date):
                         continue
 
                     articles.append({
-                        "title": title, 
+                        "title": content["title"], 
                         "url": link,
                         "posted_date": post_date, 
                         "content": content["content"],

@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import "../styles/style.css"
 import { LuCalendar, LuSearch } from "react-icons/lu";
 
@@ -7,10 +8,10 @@ const Header = () => {
             <div className="header-container">
                 <p className="title">XNEWSDAY</p>
                 <div className="wrap-header-btn">
-                    <button className="header-btn header-btn-active">TRANG CHỦ</button>
-                    <button className="header-btn">BÁO VNEXPRESS</button>
-                    <button className="header-btn">BÁO TUỔI TRẺ</button>
-                    <button className="header-btn">BÁO ĐÀ NẴNG</button>
+                    <NavLink className={({ isActive }) => isActive ? "header-btn header-btn-active" : "header-btn"} to="/">TRANG CHỦ</NavLink>
+                    <NavLink className={({ isActive }) => isActive ? "header-btn header-btn-active" : "header-btn"} to="/vnexpress">BÁO VNEXPRESS</NavLink>
+                    <NavLink className={({ isActive }) => isActive ? "header-btn header-btn-active" : "header-btn"} to="/tuoitre">BÁO TUỔI TRẺ</NavLink>
+                    <NavLink className={({ isActive }) => isActive ? "header-btn header-btn-active" : "header-btn"} to="/danang">BÁO ĐÀ NẴNG</NavLink>
                 </div>
                 <div className="wrap-header-right">
                     <button className="btn-choose-date">26/5/2025 <LuCalendar /></button>

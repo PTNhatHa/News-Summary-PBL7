@@ -1,10 +1,11 @@
 import HotNews from "../components/HotNews"
+import CategoriesBar from "../components/Categoriesbar"
 
 const NewsPage = () => {
     return (
         <>
-            <HotNews/>
-            
+            <CategoriesBar />
+            <HotNews />
         </>
     )
 }
