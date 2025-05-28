@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from utils.db_utils import get_last_crawl_date, update_last_crawl_date
 from database import SessionLocal
 from utils.crawlers.categories import CATEGORIES
+from utils.crawlers.categories_mapping import CATEGORY_MAPPING
 
 def get_article_details(article_url):
     headers = {
@@ -92,8 +93,11 @@ def get_articles_by_category(category_name, category_url, last_date):
                     link = item.get_attribute("href")
                     if link in collected_links:  # Kiểm tra nếu link đã tồn tại
                         continue
-                    title = item.text.strip()
 
+                    title = item.text.strip()
+                    if not title:
+                        continue
+                    
                     try:
                         article = item.find_element(By.XPATH, "./ancestor::article")
 
@@ -126,7 +130,8 @@ def get_articles_by_category(category_name, category_url, last_date):
                         "posted_date": post_date, 
                         "content": content["content"],
                         "image_url": thumbnail,
-                        "category_name": category_name,
+                        "category": CATEGORY_MAPPING.get(category_name, "Khác"),
+                        "source": "VNExpress"
                     })
                     time.sleep(1.5)
                     collected_links.add(link)  # Thêm link mới vào tập hợp để tránh trùng lặp
@@ -179,7 +184,7 @@ def crawl_vnexpress(last_date):
     categories = CATEGORIES['vnexpress']
     all_articles = []
     
-    selected_categories = list(categories.items())[:]
+    selected_categories = list(categories.items())[:1]
     for name, url in selected_categories:
         all_articles.extend(get_articles_by_category(name, url, last_date))
     

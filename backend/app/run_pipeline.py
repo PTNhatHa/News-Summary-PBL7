@@ -46,7 +46,7 @@ def pipeline():
             
             # Sinh tóm tắt
             try:
-                summary_text = summarizer.summarize(article['content'], article['category_name'])
+                summary_text = summarizer.summarize(article['content'], article['category'])
             except Exception as e:
                 print(f"Lỗi khi tóm tắt bài: {article['url']}: {e}")
                 continue
@@ -57,7 +57,9 @@ def pipeline():
                 image_url = article['image_url'],
                 url = article['url'],
                 posted_date = article['posted_date'],
-                created_at=datetime.now()
+                created_at=datetime.now(),
+                category = article['category'],
+                source = article['source'],
             )
             db.add(new_article)
             db.flush()
