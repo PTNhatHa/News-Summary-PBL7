@@ -13,7 +13,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, SearchRequest, PointStruct
 import os
 
-router = APIRouter()
+router = APIRouter(prefix="/articles", tags=["Article"])
 
 # Load model and Qdrant config
 embedding_model = SentenceTransformer("AITeamVN/Vietnamese_Embedding")
@@ -21,6 +21,7 @@ QDRANT_URL = ""
 QDRANT_API_KEY = ""
 COLLECTION_NAME = ""
 client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
+
 
 @router.post("/retrieve", response_model=ArticleListResponse)
 def retrieve_documents(

@@ -9,9 +9,9 @@ from app.schemas.article import ArticleOut, ArticleListResponse
 from typing import List, Optional
 from datetime import datetime
 
-router = APIRouter()
+router = APIRouter(prefix="/articles", tags=["Article"])
 
-@router.get("/articles", response_model=ArticleListResponse)
+@router.get("/detail-articles", response_model=ArticleListResponse)
 def get_articles(
     skip: int = Query(0, ge=0, description="Số lượng bản ghi cần bỏ qua"),
     limit: int = Query(10, ge=1, le=100, description="Số lượng bản ghi muốn lấy (tối đa 100)"),
