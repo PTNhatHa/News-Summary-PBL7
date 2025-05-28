@@ -32,30 +32,32 @@ class Summarizer:
         import re
 
         prefix = (
-            "Dựa trên đoạn văn bản sau đây, hãy đưa ra một bản tóm tắt thật ngắn gọn cho nội dung đã được cung cấp. "
-            "Bản tóm tắt nên có độ dài khoảng 50 từ, không vượt quá 75 từ. "
-            "Bản tóm tắt cần rõ ràng và tóm tắt được những ý chính của nội dung đã được cung cấp. "
-            "Chỉ cung cấp bản tóm tắt, không thêm các thông tin gì khác.\n\n"
+            "Dựa trên đoạn văn bản sau đây, hãy tạo một bản tóm tắt ngắn gọn và chính xác. "
+            "Bản tóm tắt phải giữ nguyên tên bệnh dịch, tên người, địa danh, cơ quan tổ chức và các số liệu quan trọng. "
+            "Không được bịa ra thông tin không có trong văn bản gốc. "
+            "Tóm tắt nên dài khoảng 50 đến 75 từ và không vượt quá 75 từ. "
+            "Không liệt kê ngày giờ, địa điểm nhỏ. Chỉ cung cấp bản tóm tắt, không thêm nhận xét.\n\n"
         )
-        input_text = f"{prefix}Đoạn tin tức ({category}): {content_text}"
-        inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, max_length=1024).to(self.device)
+        input_text = prefix + 'Đoạn tin tức (' + category + '): ' + content_text
+        input_ids = self.tokenizer(input_text, return_tensors="pt", truncation=True, max_length=512).input_ids.to(self.device)
 
         output_ids = self.model.generate(
-            inputs.input_ids,
-            max_length=1000,
-            min_length=128,
-            num_beams=2,
+            input_ids,
+            max_length=64,
+            num_beams=6,
             no_repeat_ngram_size=3,
-            repetition_penalty=1.5,
-            length_penalty=1,
+            repetition_penalty=3.0,
+            length_penalty=3,
             early_stopping=True
         )
 
         summary = self.tokenizer.decode(output_ids[0], skip_special_tokens=True).strip()
-        summary = summary.replace('_', ' ')
-        summary = re.sub(r'\s+', ' ', summary).strip()
-        sentences = re.split(r'(?<=[.!?])\s+', summary)
 
+        summary = summary.replace('ĐNO - ', ' ')                           # Bỏ dấu gạch dưới
+        summary = re.sub(r'\s+', ' ', summary).strip()               # Chuẩn hóa khoảng trắng
+
+        sentences = re.split(r'(?<=[.!?])\s+', summary)
         if len(sentences) > 1:
             summary = sentences[0]
+
         return summary
