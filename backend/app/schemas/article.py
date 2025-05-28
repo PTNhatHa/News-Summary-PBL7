@@ -1,7 +1,7 @@
 # app/schemas/article.py
 
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime 
 
 class ArticleBase(BaseModel):
@@ -20,3 +20,7 @@ class ArticleOut(ArticleBase):
     summary: Optional[str]  # Thêm dòng này
     class Config:
         orm_mode = True
+
+class ArticleListResponse(BaseModel):
+    total_article: int
+    articles: List[ArticleOut]
