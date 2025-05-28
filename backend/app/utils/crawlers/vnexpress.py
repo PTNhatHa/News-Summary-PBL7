@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from utils.db_utils import get_last_crawl_date, update_last_crawl_date
 from database import SessionLocal
 from utils.crawlers.categories import CATEGORIES
+from utils.crawlers.categories_mapping import CATEGORY_MAPPING
 
 def get_article_details(article_url):
     headers = {
@@ -33,6 +34,10 @@ def get_article_details(article_url):
                 return None
 
             soup = BeautifulSoup(response.text, "html.parser")
+
+            # Tiêu đề bài viết
+            title_tag = soup.find("h1")
+            title = title_tag.get_text(strip=True) if title_tag else ""
 
             # Ngày đăng
             date_tag = soup.find("span", class_="date")
@@ -54,9 +59,10 @@ def get_article_details(article_url):
             content = "\n".join(contents) if contents else ""
             content = content.replace(' Ảnh:', '')
             # Nếu không có content thì return None
-            if not content.strip() or not date.strip():
+            if not title or not content.strip() or not date.strip():
                 return None
             return {
+                "title": title, 
                 "posted_date": date, 
                 "content": content
                 }
@@ -92,7 +98,6 @@ def get_articles_by_category(category_name, category_url, last_date):
                     link = item.get_attribute("href")
                     if link in collected_links:  # Kiểm tra nếu link đã tồn tại
                         continue
-                    title = item.text.strip()
 
                     try:
                         article = item.find_element(By.XPATH, "./ancestor::article")
@@ -104,8 +109,9 @@ def get_articles_by_category(category_name, category_url, last_date):
                         thumbnail = None
 
                     content = get_article_details(link)
-                    if not content or not content["posted_date"]:
+                    if not content:
                         continue
+
                     if content["posted_date"]:
                         match = re.search(r'(\d{1,2})/(\d{1,2})/(\d{4}), (\d{1,2}):(\d{2})', content["posted_date"])
                         if match:
@@ -121,12 +127,13 @@ def get_articles_by_category(category_name, category_url, last_date):
                         continue
 
                     articles.append({
-                        "title": title, 
+                        "title": content["title"], 
                         "url": link,
                         "posted_date": post_date, 
                         "content": content["content"],
                         "image_url": thumbnail,
-                        "category_name": category_name,
+                        "category": CATEGORY_MAPPING.get(category_name, "Khác"),
+                        "source": "VNExpress"
                     })
                     time.sleep(1.5)
                     collected_links.add(link)  # Thêm link mới vào tập hợp để tránh trùng lặp
@@ -179,7 +186,7 @@ def crawl_vnexpress(last_date):
     categories = CATEGORIES['vnexpress']
     all_articles = []
     
-    selected_categories = list(categories.items())[:]
+    selected_categories = list(categories.items())[:1]
     for name, url in selected_categories:
         all_articles.extend(get_articles_by_category(name, url, last_date))
     

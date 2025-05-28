@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 
 from database import SessionLocal
 from utils.crawlers.categories import CATEGORIES
+from utils.crawlers.categories_mapping import CATEGORY_MAPPING
 
 def get_article_details(article_url):
     headers = {
@@ -117,6 +118,9 @@ def get_articles_by_category(category_name, category_url, last_date):
                     continue
                 title_elem = title_elem[0]
                 title = title_elem.text.strip()
+                if not title:
+                    continue
+                
                 link = title_elem.get_attribute("href")
 
                 img_elem = item.find_elements(By.CSS_SELECTOR, ".m-avatar img")
@@ -147,7 +151,8 @@ def get_articles_by_category(category_name, category_url, last_date):
                     "posted_date": post_date, 
                     "content": content["content"],
                     "image_url": thumbnail,
-                    "category_name": category_name,
+                    "category": CATEGORY_MAPPING.get(category_name, "Khác"),
+                    "source": "Đà Nẵng"
                 })
             except Exception as e:
                 print(f"Lỗi khi xử lý bài viết: {e}")
@@ -161,7 +166,7 @@ def get_articles_by_category(category_name, category_url, last_date):
 def crawl_baodanang(last_date):
     categories = CATEGORIES['baodanang']
     all_articles = []
-    selected_categories = list(categories.items())[:]
+    selected_categories = list(categories.items())[2:3]
     for name, url in selected_categories:
         all_articles.extend(get_articles_by_category(name, url, last_date))
     

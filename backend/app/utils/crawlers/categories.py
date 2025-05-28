@@ -27,7 +27,6 @@ CATEGORIES = {
         "Thế giới tự nhiên": "https://vnexpress.net/khoa-hoc/the-gioi-tu-nhien",
         "Vũ trụ": "https://vnexpress.net/khoa-hoc/vu-tru",
         "Sáng kiến khoa học 2025": "https://vnexpress.net/khoa-hoc/cuoc-thi-sang-kien-khoa-hoc",
-        "Bình luận nhiều": "https://vnexpress.net/goc-nhin/binh-luan-nhieu",
         "Chính trị & chính sách": "https://vnexpress.net/goc-nhin/chinh-tri-chinh-sach",
         "Y tế & sức khỏe": "https://vnexpress.net/goc-nhin/y-te-suc-khoe",
         "Kinh doanh & quản trị": "https://vnexpress.net/goc-nhin/kinh-doanh-quan-tri",
@@ -64,7 +63,6 @@ CATEGORIES = {
         "Thời sự": "https://vnexpress.net/y-kien/thoi-su"
     },
     "tuoitre": {
-        "Trang chủ": "https://tuoitre.vn/rss/tin-moi-nhat.rss",
         "Thời sự": "https://tuoitre.vn/rss/thoi-su.rss",
         "Thế giới": "https://tuoitre.vn/rss/the-gioi.rss",
         "Pháp luật": "https://tuoitre.vn/rss/phap-luat.rss",
