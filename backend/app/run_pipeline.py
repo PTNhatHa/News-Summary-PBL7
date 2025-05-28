@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from database import SessionLocal
 from utils.crawlers import vnexpress, tuoitre, baodanang
 from models import models
-from models.summarizer import Summarizer
+from backend.app.model_summarizer.summarizer import Summarizer
 from datetime import datetime, timezone
 from time import time
 from utils.db_utils import get_last_crawl_date, update_last_crawl_date
@@ -46,7 +46,7 @@ def pipeline():
             
             # Sinh tóm tắt
             try:
-                summary_text = summarizer.summarize(article['content'], article['category_name'])
+                summary_text = summarizer.summarize(article['content'], article['category'])
             except Exception as e:
                 print(f"Lỗi khi tóm tắt bài: {article['url']}: {e}")
                 continue
@@ -57,7 +57,9 @@ def pipeline():
                 image_url = article['image_url'],
                 url = article['url'],
                 posted_date = article['posted_date'],
-                created_at=datetime.now()
+                created_at=datetime.now(),
+                category = article['category'],
+                source = article['source'],
             )
             db.add(new_article)
             db.flush()

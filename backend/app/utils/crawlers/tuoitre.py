@@ -9,6 +9,7 @@ import time
 from utils.db_utils import get_last_crawl_date, update_last_crawl_date
 from database import SessionLocal
 from utils.crawlers.categories import CATEGORIES
+from utils.crawlers.categories_mapping import CATEGORY_MAPPING
 
 def get_articles_by_category(category_name, category_url, last_date):  
     headers = {
@@ -73,13 +74,17 @@ def get_articles_by_category(category_name, category_url, last_date):
             if not article_content.strip():
                 continue
 
+            if not entry.title:
+                continue
+            
             data.append({
-                "title": entry.title if entry.title else category_name,
+                "title": entry.title,
                 "url": entry.link,
                 "posted_date": post_date,
                 "content": article_content,
                 "image_url": thumbnail,
-                "category_name": category_name,
+                "category": CATEGORY_MAPPING.get(category_name, "Khác"),
+                "source": "Tuổi Trẻ"
             })  
             time.sleep(1.5)
 
@@ -89,7 +94,7 @@ def crawl_tuoitre(last_date):
     categories = CATEGORIES['tuoitre']
     all_articles = []
     
-    selected_categories = list(categories.items())[:]
+    selected_categories = list(categories.items())[1:2]
     for name, url in selected_categories:
         all_articles.extend(get_articles_by_category(name, url, last_date))
     

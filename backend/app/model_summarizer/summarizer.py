@@ -5,7 +5,7 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import gdown
 
 def download_model_from_drive():
-    model_dir = Path("./app/models/vit5-summarization-v2")
+    model_dir = Path("./app/model_summarizer/vit5-summarization-v2")
     if model_dir.exists():
         print("Model already exists.")
         return
@@ -22,7 +22,7 @@ def download_model_from_drive():
 class Summarizer:
     def __init__(self):
         download_model_from_drive()
-        model_path = Path("./app/models/vit5-summarization-v2").resolve().as_posix()
+        model_path = Path("./app/model_summarizer/vit5-summarization-v2").resolve().as_posix()
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = AutoTokenizer.from_pretrained(str(model_path), local_files_only=True)
