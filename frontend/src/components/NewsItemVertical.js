@@ -3,9 +3,10 @@ import { LuClock } from "react-icons/lu";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import LogoBaoDN from '../assets/LogoBaoDN.png'
-import LogoBaoTuoiTre from '../assets/LogoBaoTuoiTre.png'
-import LogoVNExpress from '../assets/LogoVNExpress.png'
+import LogoBaoDN from '../assets/LogoBaoDN.svg'
+import LogoBaoTuoiTre from '../assets/LogoBaoTuoiTre.svg'
+import LogoVNExpress from '../assets/LogoVNExpress.svg'
+import DefaultImg from '../assets/DefaultImg.jpg'
 
 const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, summary, source }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
@@ -23,7 +24,7 @@ const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, su
             <article key={id} className="wrap-news-item-vertical" onClick={() => setOpenOverlay(true)}>
                 <div
                     style={{
-                        backgroundImage: `url(${image_url ? image_url : 'https://i.pinimg.com/736x/5e/60/19/5e60199ad2032df68c5385e230a241a8.jpg'})`,
+                        backgroundImage: image_url ? `url(${image_url})` : DefaultImg,
                     }}
                     className='thumbnail-vertical'
                 >
@@ -42,7 +43,7 @@ const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, su
                             {dayjs(posted_date).format("HH:mm DD/MM/YYYY")}
                         </span>
                         <div className="category-name category-name-white" style={{ fontSize: '11px' }}>
-                            <img src={source == "Đà Nẵng" ? LogoBaoDN : source == "VNExpress" ? LogoVNExpress : LogoBaoTuoiTre} />
+                            <img className="mini-logo" src={source == "Đà Nẵng" ? LogoBaoDN : source == "VNExpress" ? LogoVNExpress : LogoBaoTuoiTre} />
                         </div>
                     </div>
                 </div>
@@ -88,7 +89,6 @@ const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, su
                         </div>
                         <div className='wrap-bottom'>
                             <button className='btn btn-cancel' onClick={() => setOpenOverlay(false)}>Đóng</button>
-                            <button className='btn btn-feedback'>Gửi đánh giá</button>
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,13 @@
 import { NavLink } from "react-router-dom";
 import "../styles/style.css"
 import { LuCalendar, LuSearch } from "react-icons/lu";
+import { useDate } from "../context/DateContext";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Header = () => {
+    const { selectedDate, setSelectedDate } = useDate()
+
     return (
         <>
             <div className="header-container">
@@ -14,9 +19,13 @@ const Header = () => {
                     <NavLink className={({ isActive }) => isActive ? "header-btn header-btn-active" : "header-btn"} to="/danang">BÁO ĐÀ NẴNG</NavLink>
                 </div>
                 <div className="wrap-header-right">
-                    <button className="btn-choose-date">26/5/2025 <LuCalendar /></button>
+                    <DatePicker
+                        className="btn-choose-date"
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                    />
                     <span className="horizontal-divide" />
-                    <button className="btn-search"><LuSearch size={18} /></button>
+                    <NavLink className={({ isActive }) => isActive ? "btn-search-active" : "btn-search"} to='/search' ><LuSearch size={18} /></NavLink>
                 </div>
             </div>
         </>

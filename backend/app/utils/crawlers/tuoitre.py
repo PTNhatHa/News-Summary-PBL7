@@ -94,7 +94,7 @@ def crawl_tuoitre(last_date):
     categories = CATEGORIES['tuoitre']
     all_articles = []
     
-    selected_categories = list(categories.items())[1:2]
+    selected_categories = list(categories.items())[:]
     for name, url in selected_categories:
         all_articles.extend(get_articles_by_category(name, url, last_date))
     

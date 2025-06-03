@@ -186,7 +186,7 @@ def crawl_vnexpress(last_date):
     categories = CATEGORIES['vnexpress']
     all_articles = []
     
-    selected_categories = list(categories.items())[:1]
+    selected_categories = list(categories.items())[:]
     for name, url in selected_categories:
         all_articles.extend(get_articles_by_category(name, url, last_date))
     

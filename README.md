@@ -27,6 +27,7 @@ python -m venv .venv
 ```sh
 pip install fastapi uvicorn sqlalchemy pymysql alembic pydantic python-dotenv psycopg2  
 pip install requests beautifulsoup4 selenium webdriver-manager torch transformers numpy feedparser gdown time  
+pip install qdrant-client sentence-transformers  
 ```
 
 ### Chạy BE

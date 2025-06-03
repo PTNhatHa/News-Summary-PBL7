@@ -23,22 +23,23 @@ def pipeline():
         # Crawl
         articles = []
 
-        last_date_vnexpress = get_last_crawl_date(db, "vnexpress").replace(microsecond=0, tzinfo=timezone.utc)
+        # Báo VNExpress
+        last_date_vnexpress = get_last_crawl_date(db, "VNExpress").replace(microsecond=0, tzinfo=timezone.utc)
         print(f"\n\n--------------------LAST DATE CRAWL VNEXPRESS: {last_date_vnexpress}--------------------\n\n")
         articles.extend(vnexpress.crawl_vnexpress(last_date_vnexpress))
-        update_last_crawl_date(db, "vnexpress")
+        update_last_crawl_date(db, "VNExpress")
 
         # Báo Tuổi Trẻ
-        last_date_tuoitre = get_last_crawl_date(db, "tuoitre").replace(microsecond=0, tzinfo=timezone.utc)
+        last_date_tuoitre = get_last_crawl_date(db, "Tuổi Trẻ").replace(microsecond=0, tzinfo=timezone.utc)
         print(f"\n\n--------------------LAST DATE CRAWL BAO TUOI TRE: {last_date_tuoitre}--------------------\n\n")
         articles.extend(tuoitre.crawl_tuoitre(last_date_tuoitre))
-        update_last_crawl_date(db, "tuoitre")
+        update_last_crawl_date(db, "Tuổi Trẻ")
 
         # Báo Đà Nẵng
-        last_date_baodanang = get_last_crawl_date(db, "baodanang").replace(microsecond=0, tzinfo=timezone.utc)
+        last_date_baodanang = get_last_crawl_date(db, "Đà Nẵng").replace(microsecond=0, tzinfo=timezone.utc)
         print(f"\n\n--------------------LAST DATE CRAWL BAODANANG: {last_date_baodanang}--------------------\n\n")
         articles.extend(baodanang.crawl_baodanang(last_date_baodanang))
-        update_last_crawl_date(db, "baodanang")
+        update_last_crawl_date(db, "Đà Nẵng")
 
         for article in articles[:]:
             summary_text = ""
@@ -95,8 +96,8 @@ def pipeline():
             )
             db.add(new_summary)
             inserted += 1
+            db.commit() 
         
-        db.commit()
         db.close()
         print(f"Đã lưu {inserted} bài và tóm tắt.")
 
