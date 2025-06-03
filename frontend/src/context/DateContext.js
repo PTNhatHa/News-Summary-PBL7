@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import newsService from "../services/newsService";
+import ArticleServices from "../services/ArticleServices";
 
 const DateContext = createContext()
 

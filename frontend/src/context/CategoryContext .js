@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import newsService from "../services/newsService";
+import ArticleServices from "../services/ArticleServices";
 
 const CategoryContext = createContext()
 
@@ -9,7 +9,7 @@ export const CategoryProvider = ({ children }) => {
     const [listCategories, setListCategories] = useState([])
     useEffect(() => {
         const fetchData = async () => {
-            const response = await newsService.getCategories()
+            const response = await ArticleServices.getCategories()
             setListCategories(response.data)
         }
         fetchData()
