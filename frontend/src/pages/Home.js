@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { useCategories } from "../context/CategoryContext "
+import { useDate } from "../context/DateContext"
 
 const settings = {
     dots: true,
@@ -46,6 +47,7 @@ const settings = {
 
 const Home = () => {
     const { listCategories } = useCategories()
+    const { selectedDate } = useDate()
     const [ListHotNews, setListHotNews] = useState([])
     const [ListVNExpress, setListVNExpress] = useState([])
     const [ListTuoiTre, setListTuoiTre] = useState([])
@@ -54,7 +56,6 @@ const Home = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const today = "2025-05-25"
             try {
                 const [
                     responseHotNews,
@@ -65,27 +66,27 @@ const Home = () => {
                     newsService.getNews({
                         skip: 0,
                         limit: 3,
-                        date: today,
+                        date: selectedDate,
                         category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     }),
                     newsService.getNews({
                         skip: 0,
                         limit: 12,
-                        date: today,
+                        date: selectedDate,
                         source: "VNExpress",
                         category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     }),
                     newsService.getNews({
                         skip: 0,
                         limit: 12,
-                        date: today,
+                        date: selectedDate,
                         source: "Tuổi Trẻ",
                         category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     }),
                     newsService.getNews({
                         skip: 0,
                         limit: 12,
-                        date: today,
+                        date: selectedDate,
                         source: "Đà Nẵng",
                         category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     })
@@ -99,7 +100,7 @@ const Home = () => {
             }
         }
         fetchData()
-    }, [curentCategory])
+    }, [curentCategory, selectedDate])
     return (
         <>
             <CategoriesBar curentCategory={curentCategory} setCurentCategory={setCurentCategory} />

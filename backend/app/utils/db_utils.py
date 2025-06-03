@@ -8,7 +8,7 @@ def get_last_crawl_date(db: Session, source: str):
     if log and log.last_crawled:
         return log.last_crawled
 
-    return datetime.fromisoformat("2025-05-18T15:28:13.975380")
+    return datetime.fromisoformat("2025-05-28T15:00:00.975380")
 
 def update_last_crawl_date(db: Session, source: str):
     log = db.query(models.CrawlLog).filter_by(source=source).first()

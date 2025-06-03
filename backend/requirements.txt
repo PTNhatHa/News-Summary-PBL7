@@ -21,3 +21,5 @@ numpy
 gdown
 psycopg2-binary
 
+qdrant-client
+sentence-transformers

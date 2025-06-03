@@ -11,22 +11,25 @@ import { CategoryProvider } from './context/CategoryContext ';
 import VNExpressPage from './pages/VNExpressPage';
 import TuoiTrePage from './pages/TuoiTrePage';
 import DaNangPage from './pages/DaNangPage';
+import { DateProvider } from './context/DateContext';
 
 function App() {
   return (
     <CategoryProvider>
-      <Router>
-        <Routes>
-          {/* Layout bọc tất cả */}
-          <Route path='/' element={<MainLayout />}>
-            <Route index element={<Home />} />
-            <Route path='vnexpress' element={<VNExpressPage />} />
-            <Route path='tuoitre' element={<TuoiTrePage />} />
-            <Route path='danang' element={<DaNangPage />} />
-            <Route path='search' element={<SearchPage />} />
-          </Route>
-        </Routes>
-      </Router>
+      <DateProvider>
+        <Router>
+          <Routes>
+            {/* Layout bọc tất cả */}
+            <Route path='/' element={<MainLayout />}>
+              <Route index element={<Home />} />
+              <Route path='vnexpress' element={<VNExpressPage />} />
+              <Route path='tuoitre' element={<TuoiTrePage />} />
+              <Route path='danang' element={<DaNangPage />} />
+              <Route path='search' element={<SearchPage />} />
+            </Route>
+          </Routes>
+        </Router>
+      </DateProvider>
     </CategoryProvider>
   );
 }

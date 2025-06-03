@@ -19,7 +19,25 @@ const getCategories = () => {
     return axios.get(`${API_BASE_URL}/categories`)
 }
 
+const searchNews = ({ query, start_date, end_date }) => {
+    return axios.post(`${API_BASE_URL}/retrieve`,
+        {
+            query: query
+        },
+        {
+            params: {
+                start_date: start_date,
+                end_date: end_date
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    )
+}
+
 export default {
     getNews,
-    getCategories
+    getCategories,
+    searchNews
 }
