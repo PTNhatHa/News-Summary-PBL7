@@ -13,7 +13,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, SearchRequest, PointStruct
 import os
 
-router = APIRouter()
+router = APIRouter(prefix="/articles", tags=["Article"])
 
 # Load model and Qdrant config
 embedding_model = SentenceTransformer("AITeamVN/Vietnamese_Embedding")
@@ -21,6 +21,7 @@ QDRANT_URL = "https://346599ba-1a5c-45c3-bf21-62d89d1aeb19.us-east4-0.gcp.cloud.
 QDRANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.RDy0m-Cd4KS1bcg1TiCaLdeEtIT7bO7q_w7nNfZb97U"
 COLLECTION_NAME = "rag_embeddings"
 client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
+
 
 @router.post("/retrieve", response_model=ArticleListResponse)
 def retrieve_documents(
