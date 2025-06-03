@@ -35,3 +35,21 @@ def dislike_summary(summary_id: int, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(feedback)
     return {"message": "Disliked", "feedback_id": feedback.id}
+
+@router.get("/count/{summary_id}")
+def get_feedback_count(summary_id: int, db: Session = Depends(get_db)):
+    likes = db.query(models.Feedback).filter(
+        models.Feedback.summary_id == summary_id,
+        models.Feedback.like == True
+    ).count()
+
+    dislikes = db.query(models.Feedback).filter(
+        models.Feedback.summary_id == summary_id,
+        models.Feedback.dislike == True
+    ).count()
+
+    return {
+        "summary_id": summary_id,
+        "likes": likes,
+        "dislikes": dislikes
+    }
