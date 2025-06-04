@@ -85,7 +85,8 @@ const SearchPage = () => {
                                         url={item.url}
                                         posted_date={item.posted_date}
                                         category={item.category}
-                                        id={item.id}
+                                        article_id={item.article_id}
+                                        summary_id={item.summary_id}
                                         summary={item.summary}
                                         source={item.source}
                                     />)

@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import NewsFeedback from './NewsFeedback'
 
-const NewsItem = ({ title, image_url, url, posted_date, category, id, summary, source = "DaNang" }) => {
+const NewsItem = ({ title, image_url, url, posted_date, category, article_id, summary_id, summary, source = "DaNang" }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const NewsItem = ({ title, image_url, url, posted_date, category, id, summary, s
 
     return (
         <>
-            <article key={id} className="wrap-news-item" onClick={() => setOpenOverlay(true)}>
+            <article key={article_id} className="wrap-news-item" onClick={() => setOpenOverlay(true)}>
                 <div
                     style={{
                         backgroundImage: image_url ? `url(${image_url})` : DefaultImg,
@@ -47,7 +47,7 @@ const NewsItem = ({ title, image_url, url, posted_date, category, id, summary, s
             {openOverlay &&
                 <div className='overlay'>
                     <NewsFeedback
-                        id={id}
+                        summary_id={summary_id}
                         summary={summary}
                         title={title}
                         url={url}
