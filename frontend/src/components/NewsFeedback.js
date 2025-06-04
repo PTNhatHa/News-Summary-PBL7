@@ -12,23 +12,31 @@ const NewsFeedback = ({ title, url, id, summary, source = "DaNang", setOpenOverl
         "dislikes": 0
     })
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await FeedbackServices.getFeedbackCount({ summary_id: id })
-                if (response.status == 200) {
-                    setCountFeedback(response.data)
-                }
-            } catch (error) {
-                console.log("Lỗi get feedback count: ", error);
+    const fetchFeedbackCount = async () => {
+        try {
+            const response = await FeedbackServices.getFeedbackCount({ summary_id: id })
+            if (response.status == 200) {
+                setCountFeedback(response.data)
             }
+        } catch (error) {
+            console.log("Lỗi get feedback count: ", error);
         }
-        fetchData()
+    }
+
+    useEffect(() => {
+        fetchFeedbackCount()
+        // Gọi mỗi khi tab được focus lại
+        window.addEventListener('focus', fetchFeedbackCount);
+
+        return () => {
+            window.removeEventListener('focus', fetchFeedbackCount);
+        };
     }, [id])
 
     const handleLike = async () => {
         try {
             const response = await FeedbackServices.addLikeSummary({ summary_id: id })
+            console.log("handleLike: ", response);
             if (response.status == 200) {
                 setCountFeedback({
                     ...countFeedback,
