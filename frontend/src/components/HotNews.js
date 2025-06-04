@@ -10,7 +10,6 @@ import { useState, useEffect } from "react";
 import NewsFeedback from "./NewsFeedback";
 
 const HotNews = ({ ListHotNews = [] }) => {
-    console.log(ListHotNews);
     const [openOverlay, setOpenOverlay] = useState(false)
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
@@ -58,13 +57,14 @@ const HotNews = ({ ListHotNews = [] }) => {
                                 console.log("item.category: ", item.category);
                                 return (
                                     <NewsItem
-                                        key={item.id}
+                                        key={item.article_id}
                                         title={item.title}
                                         image_url={item.image_url}
                                         url={item.url}
                                         posted_date={item.posted_date}
                                         category={item.category}
-                                        id={item.id}
+                                        article_id={item.article_id}
+                                        summary_id={item.summary_id}
                                         summary={item.summary}
                                         source={item.source}
                                     />
@@ -78,7 +78,7 @@ const HotNews = ({ ListHotNews = [] }) => {
             {openOverlay &&
                 <div className='overlay'>
                     <NewsFeedback
-                        id={ListHotNews[0]?.id}
+                        summary_id={ListHotNews[0]?.summary_id}
                         summary={ListHotNews[0]?.summary}
                         title={ListHotNews[0]?.title}
                         url={ListHotNews[0]?.url}

@@ -2,19 +2,18 @@ import { BiLike, BiDislike } from "react-icons/bi";
 import { useEffect, useState } from 'react';
 import FeedbackServices from "../services/FeedbackServices";
 
-const NewsFeedback = ({ title, url, id, summary, source = "DaNang", setOpenOverlay = () => { } }) => {
-    console.log("NewsFeedback: ", id);
+const NewsFeedback = ({ title, url, summary_id, summary, source = "DaNang", setOpenOverlay = () => { } }) => {
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
     const [countFeedback, setCountFeedback] = useState({
-        "summary_id": id,
+        "summary_id": summary_id,
         "likes": 0,
         "dislikes": 0
     })
 
     const fetchFeedbackCount = async () => {
         try {
-            const response = await FeedbackServices.getFeedbackCount({ summary_id: id })
+            const response = await FeedbackServices.getFeedbackCount({ summary_id: summary_id })
             if (response.status == 200) {
                 setCountFeedback(response.data)
             }
@@ -25,17 +24,11 @@ const NewsFeedback = ({ title, url, id, summary, source = "DaNang", setOpenOverl
 
     useEffect(() => {
         fetchFeedbackCount()
-        // Gọi mỗi khi tab được focus lại
-        window.addEventListener('focus', fetchFeedbackCount);
-
-        return () => {
-            window.removeEventListener('focus', fetchFeedbackCount);
-        };
-    }, [id])
+    }, [summary_id])
 
     const handleLike = async () => {
         try {
-            const response = await FeedbackServices.addLikeSummary({ summary_id: id })
+            const response = await FeedbackServices.addLikeSummary({ summary_id: summary_id })
             console.log("handleLike: ", response);
             if (response.status == 200) {
                 setCountFeedback({
@@ -50,7 +43,7 @@ const NewsFeedback = ({ title, url, id, summary, source = "DaNang", setOpenOverl
 
     const handleDisLike = async () => {
         try {
-            const response = await FeedbackServices.addDisLikeSummary({ summary_id: id })
+            const response = await FeedbackServices.addDisLikeSummary({ summary_id: summary_id })
             if (response.status == 200) {
                 setCountFeedback({
                     ...countFeedback,
@@ -80,8 +73,10 @@ const NewsFeedback = ({ title, url, id, summary, source = "DaNang", setOpenOverl
                                 size={24}
                                 fill={like ? 'rgb(42, 140, 189)' : 'rgb(101, 104, 108)'}
                                 onClick={() => {
+                                    if (!like) {
+                                        handleLike()
+                                    }
                                     setLike(true)
-                                    handleLike()
                                 }}
                                 style={{ cursor: 'pointer' }}
                             />
@@ -92,7 +87,9 @@ const NewsFeedback = ({ title, url, id, summary, source = "DaNang", setOpenOverl
                                 size={24}
                                 fill={dislike ? 'rgb(42, 140, 189)' : 'rgb(101, 104, 108)'}
                                 onClick={() => {
-                                    setDislike(true)
+                                    if (!dislike) {
+                                        setDislike(true)
+                                    }
                                     handleDisLike()
                                 }}
                                 style={{ cursor: 'pointer' }}

@@ -83,13 +83,14 @@ const DaNangPage = () => {
                         <div style={{ width: '50%' }}>
                             {ListNews?.slice(0, Math.ceil(ListNews.length / 2)).map((item) =>
                                 <NewsItem
-                                    key={item.id}
+                                    key={item.article_id}
                                     title={item.title}
                                     image_url={item.image_url}
                                     url={item.url}
                                     posted_date={item.posted_date}
                                     category={item.category}
-                                    id={item.id}
+                                    article_id={item.article_id}
+                                    summary_id={item.summary_id}
                                     summary={item.summary}
                                     source={item.source}
                                 />
@@ -98,13 +99,14 @@ const DaNangPage = () => {
                         <div style={{ width: '50%' }}>
                             {ListNews?.slice(Math.ceil(ListNews.length / 2), 10).map((item) =>
                                 <NewsItem
-                                    key={item.id}
+                                    key={item.article_id}
                                     title={item.title}
                                     image_url={item.image_url}
                                     url={item.url}
                                     posted_date={item.posted_date}
                                     category={item.category}
-                                    id={item.id}
+                                    article_id={item.article_id}
+                                    summary_id={item.summary_id}
                                     summary={item.summary}
                                     source={item.source}
                                 />

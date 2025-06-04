@@ -9,7 +9,7 @@ import LogoVNExpress from '../assets/LogoVNExpress.svg'
 import DefaultImg from '../assets/DefaultImg.jpg'
 import NewsFeedback from "./NewsFeedback";
 
-const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, summary, source }) => {
+const NewsItemVertical = ({ title, image_url, url, posted_date, category, article_id, summary_id, summary, source }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
@@ -22,7 +22,7 @@ const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, su
 
     return (
         <>
-            <article key={id} className="wrap-news-item-vertical" onClick={() => setOpenOverlay(true)}>
+            <article key={article_id} className="wrap-news-item-vertical" onClick={() => setOpenOverlay(true)}>
                 <div
                     style={{
                         backgroundImage: image_url ? `url(${image_url})` : DefaultImg,
@@ -52,7 +52,7 @@ const NewsItemVertical = ({ title, image_url, url, posted_date, category, id, su
             {openOverlay &&
                 <div className='overlay'>
                     <NewsFeedback
-                        id={id}
+                        summary_id={summary_id}
                         summary={summary}
                         title={title}
                         url={url}
