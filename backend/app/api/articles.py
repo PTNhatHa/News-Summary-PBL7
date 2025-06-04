@@ -44,8 +44,8 @@ def get_articles(
             posted_date=article.posted_date,
             category=article.category,
             source=article.source,
-            summary=summary_map.get(article.id)[1] if summary_map.get(article.id) else None,
-            summary_id=summary_map.get(article.id)[0] if summary_map.get(article.id) else None
+            summary_id=summary_map.get(article.id)[0] if summary_map.get(article.id) else None,
+            summary=summary_map.get(article.id)[1] if summary_map.get(article.id) else None
         )
         for article in articles
     ]
