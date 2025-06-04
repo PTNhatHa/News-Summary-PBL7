@@ -1,4 +1,4 @@
-name: Run Crawler Every 6 Hours
+name: Run Crawler Every 3 Hours
 
 on:
   schedule:
