@@ -16,7 +16,8 @@ class ArticleCreate(ArticleBase):
     pass
 
 class ArticleOut(ArticleBase):
-    id: int
+    article_id: int
+    summary_id: int
     summary: Optional[str]  # Thêm dòng này
     class Config:
         orm_mode = True

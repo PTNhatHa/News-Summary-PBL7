@@ -33,18 +33,19 @@ def get_articles(
 
     article_ids = [a.id for a in articles]
     summaries = db.query(Summary).filter(Summary.article_id.in_(article_ids)).all()
-    summary_map = {s.article_id: s.text for s in summaries}
+    summary_map = {s.article_id: (s.id, s.text) for s in summaries}
 
     results = [
         ArticleOut(
-            id=article.id,
+            article_id=article.id,
             title=article.title,
             image_url=article.image_url,
             url=article.url,
             posted_date=article.posted_date,
             category=article.category,
             source=article.source,
-            summary=summary_map.get(article.id)
+            summary=summary_map.get(article.id)[1] if summary_map.get(article.id) else None,
+            summary_id=summary_map.get(article.id)[0] if summary_map.get(article.id) else None
         )
         for article in articles
     ]
