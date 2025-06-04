@@ -10,12 +10,12 @@ router = APIRouter(prefix="/feedbacks", tags=["Feedback"])
 def like_summary(summary_id: int, db: Session = Depends(get_db)):
     feedback = db.query(models.Feedback).filter(models.Feedback.summary_id == summary_id).first()
 
-    if feedback:
-        feedback.like = True
-        feedback.dislike = False
-    else:
-        feedback = models.Feedback(summary_id=summary_id, like=True, dislike=False)
-        db.add(feedback)
+    # if feedback:
+    #     feedback.like = True
+    #     feedback.dislike = False
+    # else:
+    feedback = models.Feedback(summary_id=summary_id, like=True, dislike=False)
+    db.add(feedback)
 
     db.commit()
     db.refresh(feedback)
@@ -25,12 +25,12 @@ def like_summary(summary_id: int, db: Session = Depends(get_db)):
 def dislike_summary(summary_id: int, db: Session = Depends(get_db)):
     feedback = db.query(models.Feedback).filter(models.Feedback.summary_id == summary_id).first()
 
-    if feedback:
-        feedback.like = False
-        feedback.dislike = True
-    else:
-        feedback = models.Feedback(summary_id=summary_id, like=False, dislike=True)
-        db.add(feedback)
+    # if feedback:
+    #     feedback.like = False
+    #     feedback.dislike = True
+    # else:
+    feedback = models.Feedback(summary_id=summary_id, like=False, dislike=True)
+    db.add(feedback)
 
     db.commit()
     db.refresh(feedback)
