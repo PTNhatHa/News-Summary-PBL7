@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
-import newsService from "../services/newsService";
+import ArticleServices from "../services/ArticleServices";
 import { useCategories } from "../context/CategoryContext ";
 
 const CategoriesBar = ({ curentCategory = -1, setCurentCategory = () => { } }) => {

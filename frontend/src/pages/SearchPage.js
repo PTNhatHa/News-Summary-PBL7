@@ -3,21 +3,23 @@ import { useEffect, useState } from "react"
 import { LuSearch, LuMoveRight } from "react-icons/lu";
 import NewsItem from "../components/NewsItem";
 import "../styles/style.css"
-import newsService from "../services/newsService";
+import ArticleServices from "../services/ArticleServices";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDate } from "../context/DateContext";
 import dayjs from 'dayjs';
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const SearchPage = () => {
     const { selectedDate, setSelectedDate } = useDate()
     const [search, setSearch] = useState("")
     const [startDate, setStartDate] = useState(selectedDate)
     const [endDate, setEndDate] = useState(selectedDate)
-
     const [listNews, setListNews] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+
     const handleSearch = async () => {
-        if (startDate > endDate) {
+        if (startDate >= endDate) {
             alert("Vui lòng chọn ngày bắt đầu trước ngày kết thúc!")
             return
         }
@@ -26,7 +28,8 @@ const SearchPage = () => {
             return
         }
         try {
-            const response = await newsService.searchNews({
+            setIsLoading(true)
+            const response = await ArticleServices.searchNews({
                 query: search,
                 start_date: startDate,
                 end_date: endDate,
@@ -34,6 +37,8 @@ const SearchPage = () => {
             setListNews(response.data.articles)
         } catch (error) {
             console.error("Lỗi get articles: ", error);
+        } finally {
+            setIsLoading(false)
         }
     }
     return (
@@ -61,23 +66,33 @@ const SearchPage = () => {
                         />
                     </div>
                 </div>
-                <div className="list-news">
-                    {listNews.length > 0
-                        ? listNews.map((item) =>
-                            <NewsItem
-                                title={item.title}
-                                image_url={item.image_url}
-                                url={item.url}
-                                posted_date={item.posted_date}
-                                category={item.category}
-                                id={item.id}
-                                summary={item.summary}
-                                source={item.source}
-                            />)
-                        : ""
-                    }
-                </div>
-            </div>
+                {isLoading ?
+                    <div className="loading-wrap">
+                        <AiOutlineLoading3Quarters className="loading" />
+                    </div>
+                    :
+                    listNews.length == 0 ?
+                        <div className="loading-wrap">
+                            Không tìm thấy tin liên quan
+                        </div>
+                        :
+                        <div className="list-news">
+                            {listNews.length > 0
+                                ? listNews.map((item) =>
+                                    <NewsItem
+                                        title={item.title}
+                                        image_url={item.image_url}
+                                        url={item.url}
+                                        posted_date={item.posted_date}
+                                        category={item.category}
+                                        id={item.id}
+                                        summary={item.summary}
+                                        source={item.source}
+                                    />)
+                                : ""
+                            }
+                        </div>}
+            </div >
         </>
     )
 }

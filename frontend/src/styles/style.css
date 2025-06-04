@@ -540,7 +540,7 @@ input {
 
 .like-dislike {
     display: flex;
-    gap: 0.25em;
+    gap: 1em;
 }
 
 .wrap-bottom {
@@ -567,6 +567,41 @@ input {
 .btn:hover {
     transform: scale(1.03);
     cursor: pointer;
+}
+
+/* NewsFeedback */
+.feedback-count {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    gap: 0.25em;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Loading */
+.loading-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading {
+    animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @media (max-width: 1024px) {

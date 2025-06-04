@@ -8,11 +8,10 @@ import { LuClock } from "react-icons/lu";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import NewsFeedback from './NewsFeedback'
 
 const NewsItem = ({ title, image_url, url, posted_date, category, id, summary, source = "DaNang" }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
-    const [like, setLike] = useState(false)
-    const [dislike, setDislike] = useState(false)
 
     useEffect(() => {
         if (openOverlay && url) {
@@ -47,47 +46,14 @@ const NewsItem = ({ title, image_url, url, posted_date, category, id, summary, s
             </article>
             {openOverlay &&
                 <div className='overlay'>
-                    <div className='wrap-dialog'>
-                        <h2>Bạn có hài lòng với đoạn tóm tắt này không?</h2>
-                        <p>
-                            {"Nguồn bài viết: "}
-                            <a href={url} className='content-url' target="_blank" rel="noopener noreferrer">{title}</a>
-                        </p>
-                        <div className='wrap-feedback'>
-                            <p>{summary}</p>
-                            <div className='divide' />
-                            <div className='feedback-choice'>
-                                <p>Đánh giá của bạn giúp chúng tôi cải thiện chất lượng tóm tắt. Xin cảm ơn!</p>
-                                <div className='like-dislike'>
-                                    <BiLike
-                                        size={24}
-                                        fill={like ? 'rgb(42, 140, 189)' : 'rgb(101, 104, 108)'}
-                                        onClick={() => {
-                                            if (!like && dislike) {
-                                                setDislike(!dislike)
-                                            }
-                                            setLike(!like)
-                                        }}
-                                        style={{ cursor: 'pointer' }}
-                                    />
-                                    <BiDislike
-                                        size={24}
-                                        fill={dislike ? 'rgb(42, 140, 189)' : 'rgb(101, 104, 108)'}
-                                        onClick={() => {
-                                            if (like && !dislike) {
-                                                setLike(!like)
-                                            }
-                                            setDislike(!dislike)
-                                        }}
-                                        style={{ cursor: 'pointer' }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='wrap-bottom'>
-                            <button className='btn btn-cancel' onClick={() => setOpenOverlay(false)}>Đóng</button>
-                        </div>
-                    </div>
+                    <NewsFeedback
+                        id={id}
+                        summary={summary}
+                        title={title}
+                        url={url}
+                        source={source}
+                        setOpenOverlay={setOpenOverlay}
+                    />
                 </div>
             }
         </>
