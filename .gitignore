@@ -55,3 +55,4 @@ frontend/dist/
 
 # Ignore model files
 backend/app/model_summarizer/vit5-summarization-v2/
+backend/app/model_summarizer/mbart-summarization/
