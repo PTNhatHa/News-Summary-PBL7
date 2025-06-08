@@ -22,12 +22,11 @@ const SearchPage = () => {
             return
         }
         try {
-            // setIsLoading(true)
-            // const response = await ArticleServices.searchNews({
-            //     query: search,
-            // })
-            // setListNews(response.data.articles)
-            setListNews([{ "title": "hehehe" }])
+            setIsLoading(true)
+            const response = await ArticleServices.searchNews({
+                query: search,
+            })
+            setListNews(response.data.articles)
         } catch (error) {
             console.error("Lỗi get articles: ", error);
         } finally {
