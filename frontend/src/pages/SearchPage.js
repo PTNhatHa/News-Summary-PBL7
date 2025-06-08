@@ -15,7 +15,7 @@ const SearchPage = () => {
     const [search, setSearch] = useState("")
     const [startDate, setStartDate] = useState(selectedDate)
     const [endDate, setEndDate] = useState(selectedDate)
-    const [listNews, setListNews] = useState([])
+    const [listNews, setListNews] = useState(["Start"])
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSearch = async () => {
@@ -57,12 +57,14 @@ const SearchPage = () => {
                             className="btn-start-end"
                             selected={startDate}
                             onChange={(date) => setStartDate(date)}
+                            dateFormat="dd/MM/yyyy"
                         />
                         <LuMoveRight />
                         <DatePicker
                             className="btn-start-end"
                             selected={endDate}
                             onChange={(date) => setEndDate(date)}
+                            dateFormat="dd/MM/yyyy"
                         />
                     </div>
                 </div>
@@ -71,11 +73,12 @@ const SearchPage = () => {
                         <AiOutlineLoading3Quarters className="loading" />
                     </div>
                     :
-                    listNews.length == 0 ?
+                    (listNews.length == 0 && listNews[0] !== "Start") ?
                         <div className="loading-wrap">
                             Không tìm thấy tin liên quan
                         </div>
                         :
+                        listNews[0] !== "Start" &&
                         <div className="list-news">
                             {listNews.length > 0
                                 ? listNews.map((item) =>
@@ -92,7 +95,8 @@ const SearchPage = () => {
                                     />)
                                 : ""
                             }
-                        </div>}
+                        </div>
+                }
             </div >
         </>
     )

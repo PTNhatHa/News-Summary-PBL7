@@ -18,10 +18,12 @@ const VNExpressPage = () => {
     const [curentIndex, setCurentIndex] = useState(1)
     const { selectedDate } = useDate()
     const [isLoading, setIsLoading] = useState(true)
+    const [isLoadingCate, setIsLoadingCate] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setIsLoading(true)
                 const response = await ArticleServices.getNews({
                     skip: 0,
                     limit: 5,
@@ -35,12 +37,36 @@ const VNExpressPage = () => {
                 setCurentIndex(1)
             } catch (error) {
                 console.error("Lỗi get articles: ", error);
+            } finally {
+                setIsLoading(false)
             }
         }
-        setIsLoading(true)
         fetchData()
-        setIsLoading(false)
-    }, [curentCategory, selectedDate])
+    }, [selectedDate])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setIsLoadingCate(true)
+                const response = await ArticleServices.getNews({
+                    skip: 0,
+                    limit: 5,
+                    date: selectedDate,
+                    category: curentCategory == -1 ? "" : listCategories[curentCategory],
+                    source: "VNExpress"
+                })
+                setListHotNews(response.data.articles.slice(0, 3))
+                setListNews(response.data.articles.slice(3, 24))
+                setEndIndex(Math.ceil((response.data.total_article - 3) / 5))
+                setCurentIndex(1)
+            } catch (error) {
+                console.error("Lỗi get articles: ", error);
+            } finally {
+                setIsLoadingCate(false)
+            }
+        }
+        fetchData()
+    }, [curentCategory])
 
     const changeIndex = async (newIndex) => {
         setCurentIndex(newIndex)
@@ -66,62 +92,108 @@ const VNExpressPage = () => {
                 <AiOutlineLoading3Quarters className="loading" />
             </div>
             :
-            ListHotNews.length == 0 ?
-                <>
-                    <div className="loading-wrap">Chưa có tin tức mới trong ngày {dayjs(selectedDate).format("DD/MM/YYYY")}</div>
-                </>
-                :
-                <>
-                    <CategoriesBar curentCategory={curentCategory} setCurentCategory={setCurentCategory} />
-                    <div className="wrap-source-logo">
-                        <img className="source-logo" src={LogoVNExpress} />
-                    </div>
-                    <HotNews ListHotNews={ListHotNews} />
-                    <p className="title">BẢN TIN HÔM NAY</p>
-                    <div className="wrap-todaynews">
-                        <div style={{ width: '50%' }}>
-                            {ListNews?.slice(0, Math.ceil(ListNews.length / 2)).map((item) =>
-                                <NewsItem
-                                    key={item.article_id}
-                                    title={item.title}
-                                    image_url={item.image_url}
-                                    url={item.url}
-                                    posted_date={item.posted_date}
-                                    category={item.category}
-                                    article_id={item.article_id}
-                                    summary_id={item.summary_id}
-                                    summary={item.summary}
-                                    source={item.source}
-                                />
-                            )}
-                        </div>
-                        <div style={{ width: '50%' }}>
-                            {ListNews?.slice(Math.ceil(ListNews.length / 2), 10).map((item) =>
-                                <NewsItem
-                                    key={item.article_id}
-                                    title={item.title}
-                                    image_url={item.image_url}
-                                    url={item.url}
-                                    posted_date={item.posted_date}
-                                    category={item.category}
-                                    article_id={item.article_id}
-                                    summary_id={item.summary_id}
-                                    summary={item.summary}
-                                    source={item.source}
-                                />
-                            )}
-                        </div>
-                    </div>
-                    <div className="wrap-list-index">
-                        {Array.from({ length: endIndex }, (_, i) => (
-                            <button
-                                key={i}
-                                className={`btn-index ${curentIndex === i + 1 ? "btn-index-active" : ""}`}
-                                onClick={() => changeIndex(i + 1)}
-                            >{i + 1}</button>
-                        ))}
-                    </div>
-                </>
+            <>
+                <CategoriesBar curentCategory={curentCategory} setCurentCategory={setCurentCategory} />
+                <div className="wrap-source-logo">
+                    <img className="source-logo" src={LogoVNExpress} />
+                </div>
+                {
+                    (ListHotNews.length == 0 && !isLoadingCate) ?
+                        <>
+                            <div className="loading-wrap">Chưa có tin tức mới trong ngày {dayjs(selectedDate).format("DD/MM/YYYY")}</div>
+                        </>
+                        :
+                        <>
+                            {isLoadingCate ?
+                                <div className="loading-wrap">
+                                    <AiOutlineLoading3Quarters className="loading" />
+                                </div> :
+                                <>
+                                    <HotNews ListHotNews={ListHotNews} />
+                                    <p className="title">BẢN TIN HÔM NAY</p>
+                                    <div className="wrap-todaynews">
+                                        <div style={{ width: '50%' }}>
+                                            {ListNews?.slice(0, Math.ceil(ListNews.length / 2)).map((item) =>
+                                                <NewsItem
+                                                    key={item.article_id}
+                                                    title={item.title}
+                                                    image_url={item.image_url}
+                                                    url={item.url}
+                                                    posted_date={item.posted_date}
+                                                    category={item.category}
+                                                    article_id={item.article_id}
+                                                    summary_id={item.summary_id}
+                                                    summary={item.summary}
+                                                    source={item.source}
+                                                />
+                                            )}
+                                        </div>
+                                        <div style={{ width: '50%' }}>
+                                            {ListNews?.slice(Math.ceil(ListNews.length / 2), 10).map((item) =>
+                                                <NewsItem
+                                                    key={item.article_id}
+                                                    title={item.title}
+                                                    image_url={item.image_url}
+                                                    url={item.url}
+                                                    posted_date={item.posted_date}
+                                                    category={item.category}
+                                                    article_id={item.article_id}
+                                                    summary_id={item.summary_id}
+                                                    summary={item.summary}
+                                                    source={item.source}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="wrap-list-index">
+                                        {(endIndex <= 10) ?
+                                            Array.from({ length: endIndex }, (_, i) => {
+
+                                                return (
+                                                    <button
+                                                        key={i}
+                                                        className={`btn-index ${curentIndex === i + 1 ? "btn-index-active" : ""}`}
+                                                        onClick={() => changeIndex(i + 1)}
+                                                    >
+                                                        {i + 1}
+                                                    </button>
+                                                )
+                                            })
+                                            :
+                                            <>
+                                                {curentIndex > 3 && (
+                                                    <>
+                                                        <button className="btn-index" onClick={() => changeIndex(1)}>1</button>
+                                                        {curentIndex > 4 && <span>...</span>}
+                                                    </>
+                                                )}
+                                                {Array.from({ length: endIndex }, (_, i) => i + 1)
+                                                    .filter(i =>
+                                                        (i >= curentIndex - 2 && i <= curentIndex + 2)
+                                                    )
+                                                    .map((i) => (
+                                                        <button
+                                                            key={i}
+                                                            className={`btn-index ${curentIndex === i ? "btn-index-active" : ""}`}
+                                                            onClick={() => changeIndex(i)}
+                                                        >
+                                                            {i}
+                                                        </button>
+                                                    ))}
+                                                {curentIndex < endIndex - 2 && (
+                                                    <>
+                                                        {curentIndex < endIndex - 3 && <span>...</span>}
+                                                        <button className="btn-index" onClick={() => changeIndex(endIndex)}>{endIndex}</button>
+                                                    </>
+                                                )}
+                                            </>
+                                        }
+                                    </div>
+                                </>
+                            }
+                        </>
+                }
+            </>
     )
 }
 export default VNExpressPage

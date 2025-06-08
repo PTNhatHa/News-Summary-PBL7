@@ -60,7 +60,7 @@ const NewsFeedback = ({ title, url, summary_id, summary, source = "DaNang", setO
             <h2>Bạn có hài lòng với đoạn tóm tắt này không?</h2>
             <p>
                 {"Nguồn bài viết: "}
-                <a href={url} className='content-url' target="_blank" rel="noopener noreferrer">{title}</a>
+                <a href={url} className='content-url' target="_blank" rel="noopener noreferrer">{url}</a>
             </p>
             <div className='wrap-feedback'>
                 <p>{summary}</p>
