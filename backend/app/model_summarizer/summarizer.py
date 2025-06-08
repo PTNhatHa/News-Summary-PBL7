@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import gdown
+import re
 
 def download_model_from_drive():
     model_dir = Path("./app/model_summarizer/vit5-summarization-v2")
@@ -30,9 +31,15 @@ class Summarizer:
         self.tokenizer = AutoTokenizer.from_pretrained(str(model_path), local_files_only=True)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(str(model_path), local_files_only=True).to(self.device)
 
-    def summarize(self, content_text: str) -> str:
-        import re
-
+    @staticmethod
+    def clean_text(text):
+            text = re.sub(r'<.*?>', '', text)  # bỏ HTML
+            text = text.replace('\n', ' ').replace('\t', ' ').strip()
+            text = re.sub(r'\s+', ' ', text)  # bỏ khoảng trắng thừa
+            return text
+    
+    def summarize(self, content_text: str) -> str:     
+        cleaned_text = self.clean_text(content_text)
         prefix = (
             "Dựa trên đoạn văn bản sau đây, hãy tạo một bản tóm tắt ngắn gọn và chính xác. "
             "Bản tóm tắt phải giữ nguyên tên bệnh dịch, tên người, địa danh, cơ quan tổ chức và các số liệu quan trọng. "
@@ -40,7 +47,7 @@ class Summarizer:
             "Tóm tắt nên dài khoảng 50 đến 75 từ và không vượt quá 75 từ. "
             "Không liệt kê ngày giờ, địa điểm nhỏ. Chỉ cung cấp bản tóm tắt, không thêm nhận xét.\n\n"
         )
-        input_text = prefix + 'Đoạn tin tức cần tóm tắt: ' + content_text
+        input_text = prefix + 'Đoạn tin tức cần tóm tắt: ' + cleaned_text
         input_ids = self.tokenizer(input_text, return_tensors="pt", truncation=True, max_length=512).input_ids.to(self.device)
 
         output_ids = self.model.generate(
