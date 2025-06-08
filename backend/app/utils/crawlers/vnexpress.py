@@ -36,7 +36,7 @@ def get_article_details(article_url):
             soup = BeautifulSoup(response.text, "html.parser")
 
             # Tiêu đề bài viết
-            title_tag = soup.find("h1")
+            title_tag = soup.find("h1", class_="title-detail")
             title = title_tag.get_text(strip=True) if title_tag else ""
 
             # Ngày đăng
@@ -95,7 +95,7 @@ def get_articles_by_category(category_name, category_url, last_date):
             
             if news_items:            
                 for item in news_items:
-                    link = item.get_attribute("href")
+                    link = item.get_attribute("href").split("#box_comment_vne")[0]
                     if link in collected_links:  # Kiểm tra nếu link đã tồn tại
                         continue
 

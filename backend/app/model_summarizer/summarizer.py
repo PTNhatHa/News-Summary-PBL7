@@ -30,7 +30,7 @@ class Summarizer:
         self.tokenizer = AutoTokenizer.from_pretrained(str(model_path), local_files_only=True)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(str(model_path), local_files_only=True).to(self.device)
 
-    def summarize(self, content_text: str, category: str) -> str:
+    def summarize(self, content_text: str) -> str:
         import re
 
         prefix = (
