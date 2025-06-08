@@ -75,20 +75,6 @@
     padding: 0.5em 1em;
 }
 
-.btn-start-end {
-    font-size: 1em;
-    font-weight: bold;
-    background-color: var(--light-grey);
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
-
-    color: var(--dark-grey);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.25em;
-    transition: all 0.3s ease;
-}
 
 .react-datepicker__input-container input {
     width: 120px;
@@ -127,7 +113,6 @@
     transition: all 0.3s ease;
 }
 
-.btn-start-end:hover,
 .btn-search-2:hover {
     transform: scale(1.1);
     cursor: pointer;
@@ -160,7 +145,7 @@
     justify-content: center;
     align-items: center;
     flex: 1;
-    gap: 0.625em;
+    gap: 0.5em;
 }
 
 .category-item {
@@ -170,6 +155,18 @@
     padding: 0.5em 1em;
     border-radius: 9999px;
     transition: all 0.3s ease;
+    text-align: center;
+}
+
+.cate-arrow {
+    color: var(--light-grey);
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+}
+
+.cate-arrow:hover {
+    transform: scale(1.3);
+    cursor: pointer;
 }
 
 .category-item:hover {
@@ -178,13 +175,14 @@
 }
 
 .category-item-active {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     color: var(--light-grey);
     padding: 0.5em 1em;
     border-radius: 9999px;
     background: var(--light-grey);
     color: var(--main-color);
+    text-align: center;
 }
 
 /* Home */
@@ -399,12 +397,6 @@ input {
     font-size: 1em;
 }
 
-.wrap-start-end {
-    display: flex;
-    gap: 0.625em;
-    justify-content: center;
-    align-items: center;
-}
 
 /*  */
 .wrap-news-item {
@@ -588,10 +580,35 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0.5em 0;
 }
 
 .loading {
     animation: loading 1s linear infinite;
+}
+
+/* Intro */
+.intro-wrap {
+    background-image: linear-gradient(to top, #263238, #6B8D9E);
+    border-radius: 1em;
+    padding: 1.5em;
+    margin: 1.5em 0;
+    display: flex;
+    align-items: center;
+    color: var(--light-grey);
+}
+
+.intro-content>p {
+    margin: 0.5em 0;
+}
+
+.intro-content-category {
+    display: flex;
+    gap: 1em;
+}
+
+.intro-content-category>.category-name {
+    font-size: 1em;
 }
 
 @keyframes loading {

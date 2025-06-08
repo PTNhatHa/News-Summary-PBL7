@@ -23,6 +23,7 @@ const Header = () => {
                         className="btn-choose-date"
                         selected={selectedDate}
                         onChange={(date) => setSelectedDate(date)}
+                        dateFormat="dd/MM/yyyy"
                     />
                     <span className="horizontal-divide" />
                     <NavLink className={({ isActive }) => isActive ? "btn-search-active" : "btn-search"} to='/search' ><LuSearch size={18} /></NavLink>

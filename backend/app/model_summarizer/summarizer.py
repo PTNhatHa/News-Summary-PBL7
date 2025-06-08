@@ -11,6 +11,7 @@ def download_model_from_drive():
         return
 
     # https://drive.google.com/drive/folders/1FaYCm0pPmM4pgJ9RJbKfPLNnePcugmpN?usp=sharing
+    # https://drive.google.com/drive/folders/1RwVH2vDkG4eL9W4yZLLhmVxsBclKTG2v
     folder_id = "1FaYCm0pPmM4pgJ9RJbKfPLNnePcugmpN"
 
     print("Downloading model from Google Drive...")
@@ -25,10 +26,11 @@ class Summarizer:
         model_path = Path("./app/model_summarizer/vit5-summarization-v2").resolve().as_posix()
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print(f'Đang sử dụng thiết bị: {self.device}')
         self.tokenizer = AutoTokenizer.from_pretrained(str(model_path), local_files_only=True)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(str(model_path), local_files_only=True).to(self.device)
 
-    def summarize(self, content_text: str, category: str) -> str:
+    def summarize(self, content_text: str) -> str:
         import re
 
         prefix = (
@@ -38,7 +40,7 @@ class Summarizer:
             "Tóm tắt nên dài khoảng 50 đến 75 từ và không vượt quá 75 từ. "
             "Không liệt kê ngày giờ, địa điểm nhỏ. Chỉ cung cấp bản tóm tắt, không thêm nhận xét.\n\n"
         )
-        input_text = prefix + 'Đoạn tin tức (' + category + '): ' + content_text
+        input_text = prefix + 'Đoạn tin tức cần tóm tắt: ' + content_text
         input_ids = self.tokenizer(input_text, return_tensors="pt", truncation=True, max_length=512).input_ids.to(self.device)
 
         output_ids = self.model.generate(

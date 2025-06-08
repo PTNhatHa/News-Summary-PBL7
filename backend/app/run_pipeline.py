@@ -49,7 +49,7 @@ def pipeline():
             
             # Sinh tóm tắt
             try:
-                summary_text = summarizer.summarize(article['content'], article['category'])
+                summary_text = summarizer.summarize(article['content'])
             except Exception as e:
                 print(f"Lỗi khi tóm tắt bài: {article['url']}: {e}")
                 continue

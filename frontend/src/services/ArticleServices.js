@@ -21,16 +21,12 @@ const getCategories = () => {
     return axios.get(`${API_BASE_URL}/categories`)
 }
 
-const searchNews = ({ query, start_date, end_date }) => {
+const searchNews = ({ query }) => {
     return axios.post(`${API_BASE_URL}/retrieve`,
         {
             query: query
         },
         {
-            params: {
-                start_date: dayjs(start_date).format("YYYY-MM-DD"),
-                end_date: dayjs(end_date).format("YYYY-MM-DD")
-            },
             headers: {
                 'Content-Type': 'application/json'
             }

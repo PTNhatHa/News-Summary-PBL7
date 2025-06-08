@@ -41,6 +41,8 @@ def retrieve_documents(
 
     doc_scores = {}
     for hit in hits:
+        print(hit.payload)
+        print("***"*24)
         doc_id = hit.payload.get("doc_id")
         if doc_id:
             if doc_id not in doc_scores or hit.score > doc_scores[doc_id]:
