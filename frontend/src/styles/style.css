@@ -75,20 +75,6 @@
     padding: 0.5em 1em;
 }
 
-.btn-start-end {
-    font-size: 1em;
-    font-weight: bold;
-    background-color: var(--light-grey);
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
-
-    color: var(--dark-grey);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.25em;
-    transition: all 0.3s ease;
-}
 
 .react-datepicker__input-container input {
     width: 120px;
@@ -127,7 +113,6 @@
     transition: all 0.3s ease;
 }
 
-.btn-start-end:hover,
 .btn-search-2:hover {
     transform: scale(1.1);
     cursor: pointer;
@@ -401,12 +386,6 @@ input {
     font-size: 1em;
 }
 
-.wrap-start-end {
-    display: flex;
-    gap: 0.625em;
-    justify-content: center;
-    align-items: center;
-}
 
 /*  */
 .wrap-news-item {
