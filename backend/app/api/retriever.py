@@ -59,18 +59,19 @@ def retrieve_documents(
     top_articles = filtered_articles[:10]
 
     summaries = db.query(Summary).filter(Summary.article_id.in_([a.id for a in top_articles])).all()
-    summary_map = {s.article_id: s.text for s in summaries}
+    summary_map = {s.article_id: (s.id, s.text) for s in summaries}
 
     results = [
         ArticleOut(
-            id=a.id,
+            article_id=a.id,
             title=a.title,
             image_url=a.image_url,
             url=a.url,
             posted_date=a.posted_date,
             category=a.category,
             source=a.source,
-            summary=summary_map.get(a.id, "")
+            summary_id=summary_map.get(a.id)[0] if summary_map.get(a.id) else None,
+            summary=summary_map.get(a.id)[1] if summary_map.get(a.id) else None
         )
         for a in top_articles
     ]
