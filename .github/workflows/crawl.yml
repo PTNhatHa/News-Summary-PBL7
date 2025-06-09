@@ -2,7 +2,7 @@ name: Run Crawler Every 3 Hours
 
 on:
   schedule:
-    - cron: '0 */3 * * *'  # Mỗi 3 tiếng
+    - cron: '0 */4 * * *'  # Mỗi 3 tiếng
   workflow_dispatch:       # Cho phép chạy thủ công từ GitHub UI
 
 jobs:
