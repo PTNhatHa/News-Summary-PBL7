@@ -17,20 +17,20 @@ router = APIRouter(prefix="/articles", tags=["Article"])
 
 # Load model and Qdrant config
 embedding_model = SentenceTransformer("AITeamVN/Vietnamese_Embedding")
-QDRANT_URL = "https://346599ba-1a5c-45c3-bf21-62d89d1aeb19.us-east4-0.gcp.cloud.qdrant.io"
-QDRANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.RDy0m-Cd4KS1bcg1TiCaLdeEtIT7bO7q_w7nNfZb97U"
-COLLECTION_NAME = "rag_embeddings"
+QDRANT_URL = ""
+QDRANT_API_KEY = ""
+COLLECTION_NAME = ""
 client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
 
 
 @router.post("/retrieve", response_model=ArticleListResponse)
 def retrieve_documents(
     request: RetrieveRequest,
-    start_date: Optional[datetime] = Query(None, description="Ngày bắt đầu (YYYY-MM-DD)"),
-    end_date: Optional[datetime] = Query(None, description="Ngày kết thúc (YYYY-MM-DD)"),
     db: Session = Depends(get_db)
 ):
     query_vector = embedding_model.encode(request.query).tolist()
+    
+    score_threshold = 0.6  
 
     hits = client.search(
         collection_name=COLLECTION_NAME,
@@ -41,18 +41,17 @@ def retrieve_documents(
 
     doc_scores = {}
     for hit in hits:
-        print(hit.payload)
-        print("***"*24)
+        if hit.score < score_threshold:
+            continue  # Skip results below threshold
         doc_id = hit.payload.get("doc_id")
         if doc_id:
             if doc_id not in doc_scores or hit.score > doc_scores[doc_id]:
                 doc_scores[doc_id] = hit.score
+                
+    if not doc_scores:
+        return ArticleListResponse(total_article=0, articles=[])
 
     query = db.query(Article).filter(Article.id.in_(doc_scores.keys()))
-    if start_date:
-        query = query.filter(Article.posted_date >= start_date)
-    if end_date:
-        query = query.filter(Article.posted_date <= end_date)
 
     filtered_articles = query.all()
 
