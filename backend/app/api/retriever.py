@@ -29,6 +29,8 @@ def retrieve_documents(
     db: Session = Depends(get_db)
 ):
     query_vector = embedding_model.encode(request.query).tolist()
+    
+    score_threshold = 0.6  
 
     hits = client.search(
         collection_name=COLLECTION_NAME,
@@ -39,10 +41,15 @@ def retrieve_documents(
 
     doc_scores = {}
     for hit in hits:
+        if hit.score < score_threshold:
+            continue  # Skip results below threshold
         doc_id = hit.payload.get("doc_id")
         if doc_id:
             if doc_id not in doc_scores or hit.score > doc_scores[doc_id]:
                 doc_scores[doc_id] = hit.score
+                
+    if not doc_scores:
+        return ArticleListResponse(total_article=0, articles=[])
 
     query = db.query(Article).filter(Article.id.in_(doc_scores.keys()))
 
