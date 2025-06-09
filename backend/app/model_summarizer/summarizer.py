@@ -15,7 +15,8 @@ def download_model_from_drive():
     # https://drive.google.com/drive/folders/1FaYCm0pPmM4pgJ9RJbKfPLNnePcugmpN?usp=sharing
     # https://drive.google.com/drive/folders/1RwVH2vDkG4eL9W4yZLLhmVxsBclKTG2v
     # https://drive.google.com/drive/folders/1siubDROu03D2D_goG48NZkKH_XpijuFu?usp=sharing  ----mbart-----
-    folder_id = "1siubDROu03D2D_goG48NZkKH_XpijuFu"
+    # https://drive.google.com/drive/folders/1lU2S8basrTYLV5QQLSZIs2k2RSv_pyzm?usp=sharing
+    folder_id = "1lU2S8basrTYLV5QQLSZIs2k2RSv_pyzm"
 
     print("Downloading model from Google Drive...")
 
