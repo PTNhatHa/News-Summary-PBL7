@@ -53,7 +53,6 @@ CATEGORIES = {
         "Làm đẹp": "https://vnexpress.net/giai-tri/lam-dep",
         "Sân khấu - Mỹ thuật": "https://vnexpress.net/giai-tri/san-khau-my-thuat",
         "Hồ sơ phá án": "https://vnexpress.net/phap-luat/ho-so-pha-an",
-        "Video": "https://vnexpress.net/phap-luat/video",
         "Tuyển sinh": "https://vnexpress.net/giao-duc/tuyen-sinh",
         "Chân dung": "https://vnexpress.net/giao-duc/chan-dung",
         "Du học": "https://vnexpress.net/giao-duc/du-hoc",

@@ -59,6 +59,9 @@ def get_article_details(article_url):
             content = "\n".join(contents) if contents else ""
             content = content.replace(' Ảnh:', '')
             # Nếu không có content thì return None
+            if not title:
+                print("Không có title")
+
             if not title or not content.strip() or not date.strip():
                 return None
             return {
@@ -194,5 +197,5 @@ def crawl_vnexpress(last_date):
     unique_articles = {article['url']: article for article in all_articles}
     all_articles = list(unique_articles.values())
 
-
+    print(f"Crawl {len(all_articles)} bài từ Báo VNExpress")
     return all_articles

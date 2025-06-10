@@ -23,11 +23,11 @@ def pipeline():
         # Crawl
         articles = []
 
-        # Báo VNExpress
-        last_date_vnexpress = get_last_crawl_date(db, "VNExpress").replace(microsecond=0, tzinfo=timezone.utc)
-        print(f"\n\n--------------------LAST DATE CRAWL VNEXPRESS: {last_date_vnexpress}--------------------\n\n")
-        articles.extend(vnexpress.crawl_vnexpress(last_date_vnexpress))
-        update_last_crawl_date(db, "VNExpress")
+        # Báo Đà Nẵng
+        last_date_baodanang = get_last_crawl_date(db, "Đà Nẵng").replace(microsecond=0, tzinfo=timezone.utc)
+        print(f"\n\n--------------------LAST DATE CRAWL BAODANANG: {last_date_baodanang}--------------------\n\n")
+        articles.extend(baodanang.crawl_baodanang(last_date_baodanang))
+        update_last_crawl_date(db, "Đà Nẵng")
 
         # Báo Tuổi Trẻ
         last_date_tuoitre = get_last_crawl_date(db, "Tuổi Trẻ").replace(microsecond=0, tzinfo=timezone.utc)
@@ -35,12 +35,12 @@ def pipeline():
         articles.extend(tuoitre.crawl_tuoitre(last_date_tuoitre))
         update_last_crawl_date(db, "Tuổi Trẻ")
 
-        # Báo Đà Nẵng
-        last_date_baodanang = get_last_crawl_date(db, "Đà Nẵng").replace(microsecond=0, tzinfo=timezone.utc)
-        print(f"\n\n--------------------LAST DATE CRAWL BAODANANG: {last_date_baodanang}--------------------\n\n")
-        articles.extend(baodanang.crawl_baodanang(last_date_baodanang))
-        update_last_crawl_date(db, "Đà Nẵng")
-
+        # Báo VNExpress
+        last_date_vnexpress = get_last_crawl_date(db, "VNExpress").replace(microsecond=0, tzinfo=timezone.utc)
+        print(f"\n\n--------------------LAST DATE CRAWL VNEXPRESS: {last_date_vnexpress}--------------------\n\n")
+        articles.extend(vnexpress.crawl_vnexpress(last_date_vnexpress))
+        update_last_crawl_date(db, "VNExpress")
+        
         for article in articles[:]:
             summary_text = ""
             # Check bài viết đã tồn tại
