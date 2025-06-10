@@ -1,6 +1,6 @@
 from models import models
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timezone
 
 def get_last_crawl_date(db: Session, source: str):
     log = db.query(models.CrawlLog).filter_by(source=source).first()
@@ -13,7 +13,7 @@ def get_last_crawl_date(db: Session, source: str):
 def update_last_crawl_date(db: Session, source: str):
     log = db.query(models.CrawlLog).filter_by(source=source).first()
     if log:
-        log.last_crawled = datetime.now()
+        log.last_crawled = datetime.now().astimezone(timezone.utc)
     else:
         log = models.CrawlLog(source=source, last_crawled=datetime.now())
         db.add(log)
