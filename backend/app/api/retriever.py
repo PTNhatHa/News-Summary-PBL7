@@ -22,7 +22,6 @@ QDRANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.RDy0m
 COLLECTION_NAME = "rag_embeddings"
 client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
 
-
 @router.post("/retrieve", response_model=ArticleListResponse)
 def retrieve_documents(
     request: RetrieveRequest,
@@ -58,12 +57,16 @@ def retrieve_documents(
     if not doc_scores:
         return ArticleListResponse(total_article=0, articles=[])
 
-    # Fetch and sort articles
+    # Fetch articles
     query = db.query(Article).filter(Article.id.in_(doc_scores.keys()))
     filtered_articles = query.all()
-    # Sort by posted_date (newest first), with score as secondary criterion
-    filtered_articles.sort(key=lambda a: (a.posted_date, doc_scores.get(a.id, 0)), reverse=True)
+    
+    # Step 3: Sort by score (highest first) and get top 10
+    filtered_articles.sort(key=lambda a: doc_scores.get(a.id, 0), reverse=True)
     top_articles = filtered_articles[:10]
+    
+    # Step 4: Sort top 10 by posted_date (newest first)
+    top_articles.sort(key=lambda a: a.posted_date, reverse=True)
 
     # Attach summaries
     summaries = db.query(Summary).filter(Summary.article_id.in_([a.id for a in top_articles])).all()
@@ -90,4 +93,3 @@ def retrieve_documents(
         total_article=len(results),
         articles=results
     )
-
