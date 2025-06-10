@@ -61,7 +61,8 @@ def retrieve_documents(
     # Fetch and sort articles
     query = db.query(Article).filter(Article.id.in_(doc_scores.keys()))
     filtered_articles = query.all()
-    filtered_articles.sort(key=lambda a: doc_scores.get(a.id, 0), reverse=True)
+    # Sort by posted_date (newest first), with score as secondary criterion
+    filtered_articles.sort(key=lambda a: (a.posted_date, doc_scores.get(a.id, 0)), reverse=True)
     top_articles = filtered_articles[:10]
 
     # Attach summaries
@@ -82,6 +83,8 @@ def retrieve_documents(
         )
         for a in top_articles
     ]
+    for a in top_articles:
+        print(a.posted_date)
 
     return ArticleListResponse(
         total_article=len(results),
