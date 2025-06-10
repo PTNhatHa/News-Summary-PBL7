@@ -13,11 +13,11 @@ import NewsFeedback from './NewsFeedback'
 const NewsItem = ({ title, image_url, url, posted_date, category, article_id, summary_id, summary, source = "DaNang" }) => {
     const [openOverlay, setOpenOverlay] = useState(false)
 
-    useEffect(() => {
-        if (openOverlay && url) {
-            window.open(url, "_blank", "noopener,noreferrer")
-        }
-    }, [openOverlay])
+    // useEffect(() => {
+    //     if (openOverlay && url) {
+    //         window.open(url, "_blank", "noopener,noreferrer")
+    //     }
+    // }, [openOverlay])
 
     return (
         <>

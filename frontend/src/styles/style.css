@@ -611,6 +611,12 @@ input {
     font-size: 1em;
 }
 
+.intro-img {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
 @keyframes loading {
     0% {
         transform: rotate(0deg);

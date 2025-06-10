@@ -14,11 +14,11 @@ const HotNews = ({ ListHotNews = [] }) => {
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
 
-    useEffect(() => {
-        if (openOverlay && ListHotNews[0]?.url) {
-            window.open(ListHotNews[0]?.url, "_blank", "noopener,noreferrer")
-        }
-    }, [openOverlay])
+    // useEffect(() => {
+    //     if (openOverlay && ListHotNews[0]?.url) {
+    //         window.open(ListHotNews[0]?.url, "_blank", "noopener,noreferrer")
+    //     }
+    // }, [openOverlay])
     return (
         <>
             <div className="container-hot-news">

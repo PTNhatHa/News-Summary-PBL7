@@ -26,14 +26,14 @@ const VNExpressPage = () => {
                 setIsLoading(true)
                 const response = await ArticleServices.getNews({
                     skip: 0,
-                    limit: 5,
+                    limit: 13,
                     date: selectedDate,
                     category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     source: "VNExpress"
                 })
                 setListHotNews(response.data.articles.slice(0, 3))
                 setListNews(response.data.articles.slice(3, 24))
-                setEndIndex(Math.ceil((response.data.total_article - 3) / 5))
+                setEndIndex(Math.ceil((response.data.total_article - 3) / 10))
                 setCurentIndex(1)
             } catch (error) {
                 console.error("Lỗi get articles: ", error);
@@ -50,14 +50,14 @@ const VNExpressPage = () => {
                 setIsLoadingCate(true)
                 const response = await ArticleServices.getNews({
                     skip: 0,
-                    limit: 5,
+                    limit: 13,
                     date: selectedDate,
                     category: curentCategory == -1 ? "" : listCategories[curentCategory],
                     source: "VNExpress"
                 })
                 setListHotNews(response.data.articles.slice(0, 3))
                 setListNews(response.data.articles.slice(3, 24))
-                setEndIndex(Math.ceil((response.data.total_article - 3) / 5))
+                setEndIndex(Math.ceil((response.data.total_article - 3) / 10))
                 setCurentIndex(1)
             } catch (error) {
                 console.error("Lỗi get articles: ", error);
@@ -72,8 +72,8 @@ const VNExpressPage = () => {
         setCurentIndex(newIndex)
         try {
             const response = await ArticleServices.getNews({
-                skip: (newIndex - 1) * 2 + 3,
-                limit: 2,
+                skip: (newIndex - 1) * 10 + 3,
+                limit: 10,
                 date: selectedDate,
                 category: curentCategory == -1 ? "" : listCategories[curentCategory],
                 source: "VNExpress"

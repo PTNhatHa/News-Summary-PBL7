@@ -192,7 +192,9 @@ const Home = () => {
 
                         </div>
                     </div>
-                    <img src={illustration} />
+                    <div className="intro-img">
+                        <img src={illustration} />
+                    </div>
                 </div>
                 {
                     ListHotNews.length == 0 ?
@@ -208,7 +210,7 @@ const Home = () => {
                                 <>
                                     <HotNews ListHotNews={ListHotNews} />
                                     <div className="container-news-souce">
-                                        <p className="title">BÁO VNEXPRESS</p>
+                                        {ListVNExpress.length > 0 && <p className="title">BÁO VNEXPRESS</p>}
                                         {ListVNExpress.length < 4 ?
                                             <div {...settings} className="list-news-vertical">
                                                 {ListVNExpress?.map((item) =>
@@ -248,7 +250,7 @@ const Home = () => {
                                         }
                                     </div>
                                     <div className="container-news-souce">
-                                        <p className="title">BÁO TUỔI TRẺ</p>
+                                        {ListTuoiTre.length > 0 && <p className="title">BÁO TUỔI TRẺ</p>}
                                         {ListTuoiTre.length < 4 ?
                                             <div {...settings} className="list-news-vertical">
                                                 {ListTuoiTre?.map((item) =>
@@ -288,7 +290,7 @@ const Home = () => {
                                         }
                                     </div>
                                     <div className="container-news-souce">
-                                        <p className="title">BÁO ĐÀ NẴNG</p>
+                                        {ListDaNang.length > 0 && <p className="title">BÁO ĐÀ NẴNG</p>}
                                         {ListDaNang.length < 4 ?
                                             <div {...settings} className="list-news-vertical">
                                                 {ListDaNang?.map((item) =>
