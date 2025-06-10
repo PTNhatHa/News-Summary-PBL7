@@ -29,37 +29,42 @@ def retrieve_documents(
     db: Session = Depends(get_db)
 ):
     query_vector = embedding_model.encode(request.query).tolist()
-    
-    score_threshold = 0.3  
-    print("*"*100)
-    print("------------------query_vector: ", query_vector)
+
     hits = client.search(
         collection_name=COLLECTION_NAME,
         query_vector=query_vector,
-        limit=100,
+        limit=10000,
         with_payload=True
     )
 
+    # Step 1: Identify doc_ids that should be excluded
+    excluded_doc_ids = set()
+    for hit in hits:
+        chunk_id = hit.payload.get("chunk_id", 0)
+        doc_id = hit.payload.get("doc_id")
+        if doc_id is not None and chunk_id > 50:
+            excluded_doc_ids.add(doc_id)
+
+    # Step 2: Process hits, excluding any with a bad doc_id
     doc_scores = {}
     for hit in hits:
-        print("==========", hit.score, "==========")
-        if hit.score < score_threshold:
-            continue  # Skip results below threshold
         doc_id = hit.payload.get("doc_id")
-        if doc_id:
-            if doc_id not in doc_scores or hit.score > doc_scores[doc_id]:
-                doc_scores[doc_id] = hit.score
-                
+        if doc_id is None or doc_id in excluded_doc_ids:
+            continue  # Skip excluded documents
+
+        if doc_id not in doc_scores or hit.score > doc_scores[doc_id]:
+            doc_scores[doc_id] = hit.score
+
     if not doc_scores:
         return ArticleListResponse(total_article=0, articles=[])
 
+    # Fetch and sort articles
     query = db.query(Article).filter(Article.id.in_(doc_scores.keys()))
-
     filtered_articles = query.all()
-
     filtered_articles.sort(key=lambda a: doc_scores.get(a.id, 0), reverse=True)
     top_articles = filtered_articles[:10]
 
+    # Attach summaries
     summaries = db.query(Summary).filter(Summary.article_id.in_([a.id for a in top_articles])).all()
     summary_map = {s.article_id: (s.id, s.text) for s in summaries}
 

@@ -14,11 +14,11 @@ const NewsItemVertical = ({ title, image_url, url, posted_date, category, articl
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
 
-    useEffect(() => {
-        if (openOverlay && url) {
-            window.open(url, "_blank", "noopener,noreferrer")
-        }
-    }, [openOverlay])
+    // useEffect(() => {
+    //     if (openOverlay && url) {
+    //         window.open(url, "_blank", "noopener,noreferrer")
+    //     }
+    // }, [openOverlay])
 
     return (
         <>

@@ -33,7 +33,7 @@ const DaNangPage = () => {
                 })
                 setListHotNews(response.data.articles.slice(0, 3))
                 setListNews(response.data.articles.slice(3, 24))
-                setEndIndex(Math.ceil((response.data.total_article - 3) / 5))
+                setEndIndex(Math.ceil((response.data.total_article - 3) / 10))
                 setCurentIndex(1)
             } catch (error) {
                 console.error("Lỗi get articles: ", error);
@@ -57,7 +57,7 @@ const DaNangPage = () => {
                 })
                 setListHotNews(response.data.articles.slice(0, 3))
                 setListNews(response.data.articles.slice(3, 24))
-                setEndIndex(Math.ceil((response.data.total_article - 3) / 5))
+                setEndIndex(Math.ceil((response.data.total_article - 3) / 10))
                 setCurentIndex(1)
             } catch (error) {
                 console.error("Lỗi get articles: ", error);
