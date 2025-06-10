@@ -13,7 +13,7 @@ def get_last_crawl_date(db: Session, source: str):
 def update_last_crawl_date(db: Session, source: str):
     log = db.query(models.CrawlLog).filter_by(source=source).first()
     if log:
-        log.last_crawled = datetime.now().astimezone(timezone.utc)
+        log.last_crawled = datetime.now()
     else:
         log = models.CrawlLog(source=source, last_crawled=datetime.now())
         db.add(log)
